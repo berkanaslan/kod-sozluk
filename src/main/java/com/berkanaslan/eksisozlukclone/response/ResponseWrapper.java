@@ -1,4 +1,4 @@
-package com.berkanaslan.eksisozlukclone.controller.response;
+package com.berkanaslan.eksisozlukclone.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

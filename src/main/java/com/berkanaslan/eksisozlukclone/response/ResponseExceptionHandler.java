@@ -1,4 +1,4 @@
-package com.berkanaslan.eksisozlukclone.controller.response;
+package com.berkanaslan.eksisozlukclone.response;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
