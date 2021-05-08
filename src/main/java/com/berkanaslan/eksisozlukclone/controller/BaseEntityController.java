@@ -2,15 +2,16 @@ package com.berkanaslan.eksisozlukclone.controller;
 
 import com.berkanaslan.eksisozlukclone.model.BaseEntity;
 import com.berkanaslan.eksisozlukclone.repository.BaseEntityRepository;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class BaseEntityController<T extends BaseEntity> {
-    public static final String SORT_DIRECTION_ASC = "a";
-    public static final String SORT_DESC = "d";
 
     public abstract Class<T> getEntityClass();
 
@@ -18,6 +19,10 @@ public abstract class BaseEntityController<T extends BaseEntity> {
 
     @Autowired
     private BaseEntityRepository<T> baseEntityRepository;
+
+    public BaseEntityRepository<T> getBaseEntityRepository() {
+        return baseEntityRepository;
+    }
 
     // Get all
     @GetMapping
@@ -35,9 +40,9 @@ public abstract class BaseEntityController<T extends BaseEntity> {
 
     // Create || Update
     @PostMapping
-    public T save(@RequestBody T t) {
+    public long save(@RequestBody T t) {
         baseEntityRepository.save(t);
-        return t;
+        return t.getId();
     }
 
     // Delete
