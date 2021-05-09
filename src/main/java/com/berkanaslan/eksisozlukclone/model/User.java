@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Table(name = "users")
-// @Proxy(lazy = false)
 public class User extends BaseEntity {
 
     public enum Role {

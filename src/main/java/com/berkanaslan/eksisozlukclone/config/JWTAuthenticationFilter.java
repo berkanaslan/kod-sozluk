@@ -9,8 +9,11 @@ import com.berkanaslan.eksisozlukclone.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -28,6 +31,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
+        setAuthenticationFailureHandler(new JWTAuthenticationFailureHandler());
     }
 
     @Override
@@ -70,4 +74,47 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .signWith(SignatureAlgorithm.HS512, ConfigurationConstants.SECRET)
                 .compact();
     }
+
+    private static class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
+
+        @Override
+        public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
+            String reasonPhrase = HttpStatus.UNAUTHORIZED.getReasonPhrase();
+
+            if (exception instanceof BadCredentialsException) {
+                reasonPhrase = "Bad Credentials: Username or password wrong!";
+                response.setHeader(ConfigurationConstants.AUTHENTICATION_ERROR_HEADER_KEY, ConfigurationConstants.AUTHENTICATION_ERROR_BAD_CRED);
+            } else if (exception instanceof DisabledException) {
+                reasonPhrase = "User Disabled!";
+                response.setHeader(ConfigurationConstants.AUTHENTICATION_ERROR_HEADER_KEY, ConfigurationConstants.AUTHENTICATION_ERROR_DISABLED);
+            } else if (exception instanceof LockedException) {
+                reasonPhrase = "User Locked!";
+                response.setHeader(ConfigurationConstants.AUTHENTICATION_ERROR_HEADER_KEY, ConfigurationConstants.AUTHENTICATION_ERROR_LOCKED);
+            } else if (exception instanceof InternalAuthenticationServiceException) {
+                if (exception.getMessage().isEmpty()) {
+                    reasonPhrase = "Authentication Service Got An Error!";
+                } else {
+                    reasonPhrase = exception.getMessage();
+                }
+
+                response.setHeader(ConfigurationConstants.AUTHENTICATION_ERROR_HEADER_KEY, ConfigurationConstants.AUTHENTICATION_ERROR_INTERNAL_SERVICE_ERROR);
+            } else if (exception instanceof AuthenticationCredentialsNotFoundException) {
+                if (exception.getMessage().isEmpty()) {
+                    reasonPhrase = "Authentication Service Authenticate The User But Oracle Not Recognize This Username or Maybe Oracle Instance Is Down!";
+                } else {
+                    reasonPhrase = exception.getMessage();
+                }
+
+                response.setHeader(ConfigurationConstants.AUTHENTICATION_ERROR_HEADER_KEY, ConfigurationConstants.AUTHENTICATION_ERROR_USER_NOT_FOUND_ERROR);
+            }
+
+            response.setStatus(403);
+            response.setContentType("application/json");
+
+            ResponseWrapper responseWrapper = new ResponseWrapper("Unauthorized!", reasonPhrase);
+            response.getWriter().write(new ObjectMapper().writeValueAsString(responseWrapper));
+        }
+    }
 }
+
+

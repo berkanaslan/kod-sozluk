@@ -31,7 +31,6 @@ public class AuthenticationSecurityConfiguration extends WebSecurityConfigurerAd
     protected void configure(HttpSecurity http) throws Exception {
         http.antMatcher(ConfigurationConstants.LOGIN_URL)
                 .cors().and().csrf().disable().authorizeRequests()
-
                 .antMatchers(HttpMethod.POST, ConfigurationConstants.LOGIN_URL).permitAll()
                 .anyRequest().authenticated()
                 .and()

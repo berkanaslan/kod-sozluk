@@ -4,12 +4,11 @@ import com.berkanaslan.eksisozlukclone.model.Principal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,12 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.Objects;
 
+
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JWTAuthorizationFilter.class);
 
     public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
@@ -55,11 +55,11 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException expiredJwtException) {
-            LOGGER.info("JWT expired.");
             chain.doFilter(request, response);
             return;
         }
 
+        // Set TPI Principal
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(
                         Principal.parseFromJWTString(claims.getSubject()),
@@ -67,6 +67,14 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                         new ArrayList<>()
                 )
         );
+
+        // Refresh the token
+        Date date = new Date();
+        if (claims.getExpiration().getTime() - date.getTime() < ConfigurationConstants.TOKEN_REFRESH_TIME) {
+            Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            response.addHeader(ConfigurationConstants.TOKEN_HEADER, JWTAuthenticationFilter.createToken(principal));
+            response.setStatus(210);
+        }
 
         chain.doFilter(request, response);
     }
