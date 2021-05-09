@@ -2,14 +2,10 @@ package com.berkanaslan.eksisozlukclone.controller;
 
 import com.berkanaslan.eksisozlukclone.model.BaseEntity;
 import com.berkanaslan.eksisozlukclone.repository.BaseEntityRepository;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public abstract class BaseEntityController<T extends BaseEntity> {
 
