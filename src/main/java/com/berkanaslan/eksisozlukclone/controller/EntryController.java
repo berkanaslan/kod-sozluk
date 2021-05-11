@@ -1,20 +1,15 @@
 package com.berkanaslan.eksisozlukclone.controller;
 
-
 import com.berkanaslan.eksisozlukclone.model.Entry;
 import com.berkanaslan.eksisozlukclone.model.Principal;
+import com.berkanaslan.eksisozlukclone.model.Title;
 import com.berkanaslan.eksisozlukclone.model.User;
-import com.berkanaslan.eksisozlukclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
 
 
 @RestController
@@ -29,6 +24,9 @@ public class EntryController extends BaseEntityController<Entry> {
     @Autowired
     private UserController userController;
 
+    @Autowired
+    private TitleController titleController;
+
     @Override
     public Class<Entry> getEntityClass() {
         return Entry.class;
@@ -41,16 +39,24 @@ public class EntryController extends BaseEntityController<Entry> {
 
     @Override
     public long save(@RequestBody Entry entry) {
-        if (entry.getEntry() == null) {
+        if (entry.getComment() == null)
             throw new RuntimeException("Entry can not be null!");
-        }
 
-        if (entry.getId() == 0) {
-            entry.setCreatedDate(new Date());
-        } else {
-            entry.setUpdatedDate(new Date());
-        }
+        if (entry.getTitle() == null)
+            throw new RuntimeException("Title can not be null!");
 
-        return super.save(entry);
+        Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userController.findById(principal.getUserId());
+
+        entry.setUser(user);
+
+        if (entry.getId() == 0)
+            entry.setCreatedAt(new Date());
+        else
+            entry.setUpdatedAt(new Date());
+
+        super.save(entry);
+
+        return entry.getId();
     }
 }

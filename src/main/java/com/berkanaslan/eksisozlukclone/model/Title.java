@@ -3,26 +3,20 @@ package com.berkanaslan.eksisozlukclone.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Table(name = "title")
+@Table(name = "titles")
 public class Title extends BaseEntity {
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "title", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST,})
-    private List<Entry> entries;
 
     public Title() {
     }
 
-    public Title(String name, List<Entry> entries) {
+    public Title(String name) {
         this.name = name;
-        this.entries = entries;
     }
 
     public String getName() {
@@ -33,11 +27,5 @@ public class Title extends BaseEntity {
         this.name = name;
     }
 
-    public List<Entry> getEntries() {
-        return entries;
-    }
 
-    public void setEntries(List<Entry> entries) {
-        this.entries = entries;
-    }
 }

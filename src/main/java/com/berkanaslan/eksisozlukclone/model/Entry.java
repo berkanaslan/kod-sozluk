@@ -7,32 +7,45 @@ import java.util.Date;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Table(name = "entry")
+@Table(name = "entries")
 public class Entry extends BaseEntity {
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
     @JoinColumn(name = "title_id")
     private Title title;
 
-    @Column(name = "entry", nullable = false)
-    private String entry;
+    @Column(name = "comment", nullable = false)
+    private String comment;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date")
-    private Date createdDate;
+    @Column(name = "created_at", updatable = false)
+    private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_date")
-    private Date updatedDate;
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     public Entry() {
     }
 
-    public Entry(Title title, String entry, Date createdDate, Date updatedDate) {
+    public Entry(User user, Title title, String comment, Date createdAt, Date updatedAt) {
+        this.user = user;
         this.title = title;
-        this.entry = entry;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
+        this.comment = comment;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Title getTitle() {
@@ -43,27 +56,27 @@ public class Entry extends BaseEntity {
         this.title = title;
     }
 
-    public String getEntry() {
-        return entry;
+    public String getComment() {
+        return comment;
     }
 
-    public void setEntry(String entry) {
-        this.entry = entry;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public Date getUpdatedDate() {
-        return updatedDate;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
