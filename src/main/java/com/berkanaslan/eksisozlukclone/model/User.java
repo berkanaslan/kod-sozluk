@@ -15,7 +15,7 @@ public class User extends BaseEntity {
         USER
     }
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
