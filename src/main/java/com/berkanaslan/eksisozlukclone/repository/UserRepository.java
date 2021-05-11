@@ -1,6 +1,7 @@
 package com.berkanaslan.eksisozlukclone.repository;
 
 import com.berkanaslan.eksisozlukclone.model.User;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 

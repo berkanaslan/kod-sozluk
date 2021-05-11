@@ -1,0 +1,31 @@
+package com.berkanaslan.eksisozlukclone.model;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Table(name = "titles")
+public class Title extends BaseEntity {
+
+    @Column(name = "title", nullable = false)
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Title() {
+    }
+
+    public Title(String name) {
+        this.name = name;
+    }
+}
