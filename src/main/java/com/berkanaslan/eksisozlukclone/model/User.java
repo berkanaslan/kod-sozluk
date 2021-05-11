@@ -2,7 +2,6 @@ package com.berkanaslan.eksisozlukclone.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 
