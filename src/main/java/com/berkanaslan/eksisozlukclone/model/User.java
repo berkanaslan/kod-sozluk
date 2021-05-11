@@ -21,25 +21,25 @@ public class User extends BaseEntity {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "enabled")
+    @Column(name = "enabled", nullable = false)
     private boolean enabled = true;
 
-    @Column(name = "blocked")
+    @Column(name = "blocked", nullable = false)
     private boolean blocked;
 
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 

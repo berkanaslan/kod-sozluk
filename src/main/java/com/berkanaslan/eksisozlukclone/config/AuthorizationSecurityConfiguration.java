@@ -6,6 +6,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
 @Order(2)
@@ -23,8 +24,8 @@ public class AuthorizationSecurityConfiguration extends WebSecurityConfigurerAda
                 .antMatchers("/actuator/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JWTAuthorizationFilter(authenticationManager()));
-
+                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.headers().frameOptions().disable();
     }
 
