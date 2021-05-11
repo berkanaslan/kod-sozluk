@@ -59,18 +59,21 @@
         </dependency>
         <!-- JWT -->
 
-        <!-- MySQL
+        <!-- MySQL -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
-        </dependency> -->
+        </dependency>
+        <!-- MySQL -->
+
+        <!-- H2
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <!-- MySQL -->
+        -->
 
         <!-- Spring Test -->
         <dependency>
