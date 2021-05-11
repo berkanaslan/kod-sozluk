@@ -75,25 +75,24 @@
         <!-- Spring Test -->
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+
     <profiles>
-        <profile>
-            <id>dev</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <spring.boot.profile>dev</spring.boot.profile>
-            </properties>
-            <dependencies>
-                <!-- H2 -->
-                <dependency>
-                    <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
-                    <scope>runtime</scope>
-                </dependency>
-                <!-- H2 -->
-            </dependencies>
-        </profile>
+        <!-- PROD -->
         <profile>
             <id>prod</id>
             <activation>
@@ -103,47 +102,29 @@
                 <spring.boot.profile>prod</spring.boot.profile>
             </properties>
             <dependencies>
-                <!-- MySQL -->
                 <dependency>
                     <groupId>mysql</groupId>
                     <artifactId>mysql-connector-java</artifactId>
-                    <scope>runtime</scope>
                 </dependency>
-                <!-- MySQL -->
+            </dependencies>
+        </profile>
+
+        <!-- DEV -->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.boot.profile>dev</spring.boot.profile>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                </dependency>
             </dependencies>
         </profile>
     </profiles>
-
-    <build>
-        <finalName>EksiSozlukClone</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/resources/profiles</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <tasks>
-                                <echo>Current maven active profile: ${current.profile}</echo>
-                            </tasks>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

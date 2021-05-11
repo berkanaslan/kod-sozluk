@@ -28,9 +28,4 @@ public class TitleController extends BaseEntityController<Title> {
         return PATH;
     }
 
-    @GetMapping
-    @Override
-    public List<Title> findAll() {
-        return titleRepository.findAll();
-    }
 }
