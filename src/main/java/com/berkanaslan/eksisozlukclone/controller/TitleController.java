@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(name = TitleController.PATH)
+@RequestMapping(path = TitleController.PATH)
 public class TitleController extends BaseEntityController<Title> {
 
     static final String PATH = "title";
