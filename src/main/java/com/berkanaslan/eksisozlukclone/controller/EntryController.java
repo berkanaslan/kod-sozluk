@@ -21,8 +21,6 @@ public class EntryController extends BaseEntityController<Entry> {
     @Autowired
     private UserController userController;
 
-    @Autowired
-    private TitleController titleController;
 
     @Override
     public Class<Entry> getEntityClass() {

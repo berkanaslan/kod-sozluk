@@ -61,7 +61,7 @@ public class Entry extends BaseEntity {
     }
 
     public void setComment(String comment) {
-        this.comment = comment;
+        this.comment = comment.toLowerCase();
     }
 
     public Date getCreatedAt() {
