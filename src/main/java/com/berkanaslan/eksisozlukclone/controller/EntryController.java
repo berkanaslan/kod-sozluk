@@ -2,14 +2,14 @@ package com.berkanaslan.eksisozlukclone.controller;
 
 import com.berkanaslan.eksisozlukclone.model.Entry;
 import com.berkanaslan.eksisozlukclone.model.Principal;
-import com.berkanaslan.eksisozlukclone.model.Title;
 import com.berkanaslan.eksisozlukclone.model.User;
+import com.berkanaslan.eksisozlukclone.repository.EntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 
 @RestController
@@ -17,9 +17,6 @@ import java.util.Date;
 public class EntryController extends BaseEntityController<Entry> {
 
     static final String PATH = "entry";
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserController userController;
@@ -59,4 +56,22 @@ public class EntryController extends BaseEntityController<Entry> {
 
         return entry.getId();
     }
+
+    @GetMapping(path = "/user/{userId}")
+    public List<Entry> findAllByUserId(@PathVariable(value = "userId") long userId) {
+        return ((EntryRepository) getBaseEntityRepository()).findAllByUserId(userId);
+    }
+
+    @GetMapping(path = "/title/{titleId}")
+    public List<Entry> findAllByTitleId(@PathVariable(value = "titleId") long titleId) {
+        return ((EntryRepository) getBaseEntityRepository()).findAllByTitleId(titleId);
+    }
+
+
+    @GetMapping(path = "/title/{titleId}/user/{userId}")
+    public List<Entry> findAllByTitleIdAndUserId(@PathVariable(value = "titleId") long titleId,
+                                                 @PathVariable(value = "userId") long userId) {
+        return ((EntryRepository) getBaseEntityRepository()).findAllByTitleIdAndUserId(titleId, userId);
+    }
+
 }
