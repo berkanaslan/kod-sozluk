@@ -3,13 +3,16 @@ package com.berkanaslan.eksisozlukclone.controller;
 import com.berkanaslan.eksisozlukclone.model.Entry;
 import com.berkanaslan.eksisozlukclone.model.Principal;
 import com.berkanaslan.eksisozlukclone.model.User;
+import com.berkanaslan.eksisozlukclone.model.dto.EntryDTO;
 import com.berkanaslan.eksisozlukclone.repository.EntryRepository;
+import com.berkanaslan.eksisozlukclone.service.EntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -20,6 +23,9 @@ public class EntryController extends BaseEntityController<Entry> {
 
     @Autowired
     private UserController userController;
+
+    @Autowired
+    EntryService entryService;
 
 
     @Override
@@ -56,20 +62,23 @@ public class EntryController extends BaseEntityController<Entry> {
     }
 
     @GetMapping(path = "/user/{userId}")
-    public List<Entry> findAllByUserId(@PathVariable(value = "userId") long userId) {
-        return ((EntryRepository) getBaseEntityRepository()).findAllByUserId(userId);
+    public List<EntryDTO> findAllByUserId(@PathVariable(value = "userId") long userId) {
+        return ((EntryRepository) getBaseEntityRepository()).findAllByUserId(userId)
+                .stream().map(entryService::convertToDTO).collect(Collectors.toList());
     }
 
     @GetMapping(path = "/title/{titleId}")
-    public List<Entry> findAllByTitleId(@PathVariable(value = "titleId") long titleId) {
-        return ((EntryRepository) getBaseEntityRepository()).findAllByTitleId(titleId);
+    public List<EntryDTO> findAllByTitleId(@PathVariable(value = "titleId") long titleId) {
+        return ((EntryRepository) getBaseEntityRepository()).findAllByTitleId(titleId)
+                .stream().map(entryService::convertToDTO).collect(Collectors.toList());
     }
 
 
     @GetMapping(path = "/title/{titleId}/user/{userId}")
-    public List<Entry> findAllByTitleIdAndUserId(@PathVariable(value = "titleId") long titleId,
-                                                 @PathVariable(value = "userId") long userId) {
-        return ((EntryRepository) getBaseEntityRepository()).findAllByTitleIdAndUserId(titleId, userId);
+    public List<EntryDTO> findAllByTitleIdAndUserId(@PathVariable(value = "titleId") long titleId,
+                                                    @PathVariable(value = "userId") long userId) {
+        return ((EntryRepository) getBaseEntityRepository()).findAllByTitleIdAndUserId(titleId, userId)
+                .stream().map(entryService::convertToDTO).collect(Collectors.toList());
     }
 
 }
