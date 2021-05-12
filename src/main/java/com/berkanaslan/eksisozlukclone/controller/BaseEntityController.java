@@ -3,6 +3,11 @@ package com.berkanaslan.eksisozlukclone.controller;
 import com.berkanaslan.eksisozlukclone.model.BaseEntity;
 import com.berkanaslan.eksisozlukclone.repository.BaseEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -21,9 +26,16 @@ public abstract class BaseEntityController<T extends BaseEntity> {
     }
 
     // Get all
-    @GetMapping
+    @GetMapping("/all")
     public List<T> findAll() {
         return baseEntityRepository.findAll();
+    }
+
+    // Get all with paged
+    @GetMapping
+    public Page<T> findAllPaged(@PageableDefault(size = 20, sort = {"id"},
+            direction = Sort.Direction.DESC) Pageable pageable) {
+        return baseEntityRepository.findAll(pageable);
     }
 
     // Get single
