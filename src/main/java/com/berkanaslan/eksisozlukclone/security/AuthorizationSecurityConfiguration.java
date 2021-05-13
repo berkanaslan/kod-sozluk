@@ -1,8 +1,10 @@
-package com.berkanaslan.eksisozlukclone.config;
+package com.berkanaslan.eksisozlukclone.security;
 
+import com.berkanaslan.eksisozlukclone.config.ConfigurationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,6 +24,9 @@ public class AuthorizationSecurityConfiguration extends WebSecurityConfigurerAda
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/actuator/**").permitAll()
+                .antMatchers(HttpMethod.GET, ConfigurationConstants.ENTRY_URL).permitAll()
+                .antMatchers(HttpMethod.GET, ConfigurationConstants.TITLE_URL).permitAll()
+                .antMatchers(HttpMethod.GET, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))

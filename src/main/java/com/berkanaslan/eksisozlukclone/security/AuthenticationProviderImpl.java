@@ -1,4 +1,4 @@
-package com.berkanaslan.eksisozlukclone.config;
+package com.berkanaslan.eksisozlukclone.security;
 
 import com.berkanaslan.eksisozlukclone.model.Principal;
 import com.berkanaslan.eksisozlukclone.model.User;
