@@ -9,13 +9,16 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.util.Arrays;
+
 @ControllerAdvice(annotations = RestController.class)
 public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
     public static final String SUCCESS_MESSAGE = "Success!";
 
+
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return true;
+        return !returnType.getExecutable().getName().equals("openapiJson");
     }
 
     @Override

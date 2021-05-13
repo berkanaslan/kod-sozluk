@@ -32,9 +32,6 @@ public class AuthenticationSecurityConfiguration extends WebSecurityConfigurerAd
         http.antMatcher(ConfigurationConstants.LOGIN_URL)
                 .cors().and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, ConfigurationConstants.LOGIN_URL).permitAll()
-                .antMatchers(HttpMethod.GET, "/**").permitAll()
-                .antMatchers(HttpMethod.GET, ConfigurationConstants.ENTRY_URL).permitAll()
-                .antMatchers(HttpMethod.GET, ConfigurationConstants.TITLE_URL).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(jwtAuthenticationFilter(authenticationManager()));
