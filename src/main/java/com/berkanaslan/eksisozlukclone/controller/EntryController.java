@@ -2,9 +2,11 @@ package com.berkanaslan.eksisozlukclone.controller;
 
 import com.berkanaslan.eksisozlukclone.model.Entry;
 import com.berkanaslan.eksisozlukclone.model.Principal;
+import com.berkanaslan.eksisozlukclone.model.Title;
 import com.berkanaslan.eksisozlukclone.model.User;
 import com.berkanaslan.eksisozlukclone.model.dto.EntryDTO;
 import com.berkanaslan.eksisozlukclone.repository.EntryRepository;
+import com.berkanaslan.eksisozlukclone.repository.TitleRepository;
 import com.berkanaslan.eksisozlukclone.service.EntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +29,8 @@ public class EntryController extends BaseEntityController<Entry> {
     @Autowired
     EntryService entryService;
 
+    @Autowired
+    TitleController titleController;
 
     @Override
     public Class<Entry> getEntityClass() {
@@ -43,8 +47,11 @@ public class EntryController extends BaseEntityController<Entry> {
         if (entry.getComment() == null)
             throw new RuntimeException("Entry can not be null!");
 
-        if (entry.getTitle() == null)
-            throw new RuntimeException("Title can not be null!");
+
+        Title title = titleController.findById(entry.getTitle().getId());
+
+        if (title == null)
+            throw new RuntimeException("Title not found!");
 
         Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userController.findById(principal.getUserId());

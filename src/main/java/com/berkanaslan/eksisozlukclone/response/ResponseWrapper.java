@@ -2,6 +2,8 @@ package com.berkanaslan.eksisozlukclone.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.Date;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseWrapper {
 
@@ -35,3 +37,4 @@ public class ResponseWrapper {
         return data;
     }
 }
+

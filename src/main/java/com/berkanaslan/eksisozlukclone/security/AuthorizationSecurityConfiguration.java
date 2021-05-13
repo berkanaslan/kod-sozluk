@@ -23,10 +23,12 @@ public class AuthorizationSecurityConfiguration extends WebSecurityConfigurerAda
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/actuator/**").permitAll()
-                .antMatchers(HttpMethod.GET, ConfigurationConstants.ENTRY_URL).permitAll()
-                .antMatchers(HttpMethod.GET, ConfigurationConstants.TITLE_URL).permitAll()
-                .antMatchers(HttpMethod.GET, "/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/actuator/**",
+                        ConfigurationConstants.ENTRY_URL,
+                        ConfigurationConstants.TITLE_URL,
+                        "/api-docs/**",
+                        "/api-docs.html/**",
+                        "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
