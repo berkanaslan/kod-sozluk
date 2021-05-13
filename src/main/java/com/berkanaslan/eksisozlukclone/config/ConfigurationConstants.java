@@ -23,5 +23,11 @@ public interface ConfigurationConstants {
     String AUTHENTICATION_ERROR_USER_NOT_FOUND_ERROR = "UserNotFoundError";
 
     // URL
+    String PERMIT_ALL = "/**";
     String LOGIN_URL = "/login";
+    String ENTRY = "/entry";
+    String TITLE = "/title";
+
+    String TITLE_URL = TITLE + PERMIT_ALL;
+    String ENTRY_URL = ENTRY + PERMIT_ALL;
 }
