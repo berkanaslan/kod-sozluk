@@ -28,6 +28,7 @@ public class AuthorizationSecurityConfiguration extends WebSecurityConfigurerAda
                         ConfigurationConstants.TITLE_URL,
                         "/api-docs/**",
                         "/api-docs.html/**",
+                        "/swagger-ui.html",
                         "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
