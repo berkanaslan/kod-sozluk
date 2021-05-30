@@ -10,8 +10,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class Initializer implements ApplicationListener<ApplicationReadyEvent> {
 
-    @Autowired
-    private UserController userController;
+    private final UserController userController;
+
+    public Initializer(UserController userController) {
+        this.userController = userController;
+    }
 
 
     @Override
