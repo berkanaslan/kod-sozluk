@@ -11,7 +11,4 @@ public interface EntryRepository extends BaseEntityRepository<Entry> {
     List<Entry> findAllByTitleId(long userId);
 
     List<Entry> findAllByTitleIdAndUserId(long titleId, long userId);
-
-    List<Entry> findAllByCommentContains(String query);
-
 }

@@ -11,5 +11,5 @@ public interface UserRepository extends BaseEntityRepository<User> {
 
     Optional<User> findByUsername(String username);
 
-    List<User> findAllByUsernameContains(String query);
+    List<User> findTop10ByUsernameContains(String query);
 }

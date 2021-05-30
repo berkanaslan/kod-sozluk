@@ -29,8 +29,8 @@ public class SearchController {
     public List<SearchResponse> getSearchResults(@RequestParam String query) {
         List<SearchResponse> searchResponses = new ArrayList<>();
 
-        List<User> users = userRepository.findAllByUsernameContains(query);
-        List<Title> titles = titleRepository.findAllByNameContains(query);
+        List<User> users = userRepository.findTop10ByUsernameContains(query);
+        List<Title> titles = titleRepository.findTop10ByNameContains(query);
 
         if (users != null) {
             for (User user : users) {
@@ -43,7 +43,6 @@ public class SearchController {
                 searchResponses.add(new SearchResponse(title.getName(), "Title", "title/" + title.getId()));
             }
         }
-
 
         return searchResponses;
     }

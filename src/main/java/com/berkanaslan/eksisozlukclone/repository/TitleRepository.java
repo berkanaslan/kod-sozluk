@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface TitleRepository extends BaseEntityRepository<Title> {
-    List<Title> findAllByNameContains(String query);
+    List<Title> findTop10ByNameContains(String query);
 }
