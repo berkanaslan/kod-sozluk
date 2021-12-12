@@ -2,6 +2,7 @@ package com.berkanaslan.eksisozlukclone.controller;
 
 import com.berkanaslan.eksisozlukclone.model.BaseEntity;
 import com.berkanaslan.eksisozlukclone.repository.BaseEntityRepository;
+import com.berkanaslan.eksisozlukclone.util.ExceptionMessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +44,7 @@ public abstract class BaseEntityController<T extends BaseEntity> {
     public T findById(@PathVariable(name = "id") long id) {
         Optional<T> optionalT = baseEntityRepository.findById(id);
         if (optionalT.isPresent()) return optionalT.get();
-        throw new RuntimeException("No such " + getEntityClass().getSimpleName());
+        throw new RuntimeException(ExceptionMessageUtil.getMessageByLocale("message.no_such") + " " + getEntityClass().getSimpleName());
     }
 
     // Create || Update

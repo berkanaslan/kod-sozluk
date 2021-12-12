@@ -16,11 +16,13 @@ import java.util.Optional;
 @RestController
 @RequestMapping(path = UserController.PATH)
 public class UserController extends BaseEntityController<User> {
-
     static final String PATH = "user";
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public Class<User> getEntityClass() {
@@ -33,25 +35,60 @@ public class UserController extends BaseEntityController<User> {
     }
 
     @Override
-    public long save(@RequestBody User user) {
-        UserRepository repository = (UserRepository) getBaseEntityRepository();
-
-        if (user.getId() == 0 && user.getPassword() == null) {
-            throw new RuntimeException(ExceptionMessageUtil.getMessageByLocale("message.password_is_required"));
+    public long save(@RequestBody final User user) {
+        if (user.getId() != 0) {
+            return this.updateUser(user);
         }
 
-        Optional<User> optional = repository.getById(user.getId());
-
-        if (optional.isPresent()) {
-            User existing = optional.get();
-
-            user.setPassword(existing.getPassword());
-
-            repository.save(user);
-            return user.getId();
+        if (user.getPassword() == null) {
+            throw new IllegalArgumentException(ExceptionMessageUtil.getMessageByLocale("message.password_is_required"));
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        if (user.getUsername() == null) {
+            throw new IllegalArgumentException(ExceptionMessageUtil.getMessageByLocale("message.username_is_required"));
+        }
+
+        if (user.getEmail() == null) {
+            throw new IllegalArgumentException(ExceptionMessageUtil.getMessageByLocale("message.email_is_required"));
+        }
+
+        final Optional<User> isUsernameAlreadyUsed = userRepository.findByUsername(user.getUsername());
+
+        if (isUsernameAlreadyUsed.isPresent()) {
+            throw new IllegalArgumentException(ExceptionMessageUtil.getMessageByLocale("message.username_already_using"));
+        }
+
+        final Optional<User> isEmailAlreadyUsed = userRepository.findByEmail(user.getEmail());
+
+        if (isEmailAlreadyUsed.isPresent()) {
+            throw new IllegalArgumentException(ExceptionMessageUtil.getMessageByLocale("message.email_already_using"));
+        }
+
+        return super.save(user);
+    }
+
+    private long updateUser(@RequestBody final User user) {
+        if (user.getId() == 0) {
+            return this.save(user);
+        }
+
+        final Optional<User> userOptional = userRepository.getById(user.getId());
+
+        if (userOptional.isEmpty()) {
+            throw new IllegalArgumentException(ExceptionMessageUtil.getMessageByLocale("message.user_not_found"));
+        }
+
+        final User existingUser = userOptional.get();
+
+        // Set previous password if not declared. Otherwise, encode the new password.
+        if (user.getPassword() == null) {
+            user.setPassword(existingUser.getPassword());
+        } else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
         return super.save(user);
     }
 }

@@ -21,7 +21,7 @@ public class User extends Auditable implements BaseEntity {
         ADMIN, EDITOR, USER
     }
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, updatable = false)
     private String username;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -29,24 +29,21 @@ public class User extends Auditable implements BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String firstName;
-
-    @Column(nullable = false)
     private String lastName;
 
     @Column(nullable = false)
     private boolean enabled = true;
 
     @Column(nullable = false)
-    private boolean blocked;
+    private boolean blocked = false;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.USER;
 
     public User() {
     }
