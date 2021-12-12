@@ -3,6 +3,7 @@ package com.berkanaslan.eksisozlukclone.controller;
 
 import com.berkanaslan.eksisozlukclone.model.User;
 import com.berkanaslan.eksisozlukclone.repository.UserRepository;
+import com.berkanaslan.eksisozlukclone.util.ExceptionMessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +37,7 @@ public class UserController extends BaseEntityController<User> {
         UserRepository repository = (UserRepository) getBaseEntityRepository();
 
         if (user.getId() == 0 && user.getPassword() == null) {
-            throw new RuntimeException("Password is required.");
+            throw new RuntimeException(ExceptionMessageUtil.getMessageByLocale("message.password_is_required"));
         }
 
         Optional<User> optional = repository.getById(user.getId());
