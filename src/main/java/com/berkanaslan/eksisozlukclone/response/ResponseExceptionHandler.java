@@ -1,5 +1,6 @@
 package com.berkanaslan.eksisozlukclone.response;
 
+import com.berkanaslan.eksisozlukclone.util.ExceptionMessageUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +12,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice()
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final String ERROR_MESSAGE = "Error!";
-
     @ExceptionHandler(value = RuntimeException.class)
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
-        ResponseWrapper responseWrapper = new ResponseWrapper(ERROR_MESSAGE, ex.getMessage());
+        ResponseWrapper responseWrapper = new ResponseWrapper(ExceptionMessageUtil.getMessageByLocale("message.error"), ex.getMessage());
         return handleExceptionInternal(ex, responseWrapper, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 }
