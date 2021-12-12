@@ -26,7 +26,7 @@
     <developers>
         <developer>
             <name>Berkan Aslan</name>
-            <email>hello@berkanaslan.com</email>
+            <email>aslnberkan@gmail.com</email>
             <timezone>GMT+3</timezone>
         </developer>
     </developers>
@@ -53,6 +53,13 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <!-- Spring Boot -->
+
+        <!-- MySQL -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <!-- MySQL -->
 
         <!-- JWT -->
         <dependency>
@@ -119,29 +126,17 @@
             <properties>
                 <spring.boot.profile>prod</spring.boot.profile>
             </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
-                </dependency>
-            </dependencies>
         </profile>
 
         <!-- DEV -->
         <profile>
             <id>dev</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
                 <spring.boot.profile>dev</spring.boot.profile>
             </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
-                </dependency>
-            </dependencies>
         </profile>
     </profiles>
 

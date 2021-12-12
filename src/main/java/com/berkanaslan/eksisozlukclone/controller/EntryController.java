@@ -6,7 +6,6 @@ import com.berkanaslan.eksisozlukclone.model.Title;
 import com.berkanaslan.eksisozlukclone.model.User;
 import com.berkanaslan.eksisozlukclone.model.dto.EntryDTO;
 import com.berkanaslan.eksisozlukclone.repository.EntryRepository;
-import com.berkanaslan.eksisozlukclone.repository.TitleRepository;
 import com.berkanaslan.eksisozlukclone.service.EntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -87,5 +86,4 @@ public class EntryController extends BaseEntityController<Entry> {
         return ((EntryRepository) getBaseEntityRepository()).findAllByTitleIdAndUserId(titleId, userId)
                 .stream().map(entryService::convertToDTO).collect(Collectors.toList());
     }
-
 }

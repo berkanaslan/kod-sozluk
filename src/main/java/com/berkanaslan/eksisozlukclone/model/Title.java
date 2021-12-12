@@ -2,7 +2,9 @@ package com.berkanaslan.eksisozlukclone.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -26,6 +28,4 @@ public class Title extends BaseEntity {
     public void setName(String name) {
         this.name = name.toLowerCase();
     }
-
-
 }

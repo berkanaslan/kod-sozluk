@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Locale;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -43,6 +41,17 @@ public class User extends BaseEntity {
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public User(String username, String password, String email, String firstName, String lastName, boolean enabled, boolean blocked, Role role) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.enabled = enabled;
+        this.blocked = blocked;
+        this.role = role;
+    }
 
     public String getUsername() {
         return username;
@@ -109,16 +118,5 @@ public class User extends BaseEntity {
     }
 
     public User() {
-    }
-
-    public User(String username, String password, String email, String firstName, String lastName, boolean enabled, boolean blocked, Role role) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.enabled = enabled;
-        this.blocked = blocked;
-        this.role = role;
     }
 }

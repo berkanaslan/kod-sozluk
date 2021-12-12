@@ -10,12 +10,12 @@ import java.util.Date;
 public class EntryDTO extends BaseEntity {
 
     private long titleId;
+
     @JsonProperty("user")
     private UserDTO userDTO;
     private String comment;
     private Date createdAt;
     private Date updatedAt;
-
 
     public long getTitleId() {
         return titleId;
