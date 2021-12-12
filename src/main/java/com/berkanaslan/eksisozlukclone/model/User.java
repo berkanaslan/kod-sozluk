@@ -1,5 +1,6 @@
 package com.berkanaslan.eksisozlukclone.model;
 
+import com.berkanaslan.eksisozlukclone.audit.Auditable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -7,40 +8,48 @@ import javax.persistence.*;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Table(name = "users")
-public class User extends BaseEntity {
+@Table(indexes = {@Index(columnList = "username")})
+public class User extends Auditable implements BaseEntity {
+    public static final String SYSTEM = "SYSTEM";
+    public static final String SUPER_ADMIN_USERNAME = "superadmin";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     public enum Role {
-        ADMIN,
-        USER
+        ADMIN, EDITOR, USER
     }
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Column(name = "password", nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    @Column(name = "email", nullable = false)
+    @Column(nullable = false)
     private String email;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(nullable = false)
     private String lastName;
 
-    @Column(name = "enabled", nullable = false)
+    @Column(nullable = false)
     private boolean enabled = true;
 
-    @Column(name = "blocked", nullable = false)
+    @Column(nullable = false)
     private boolean blocked;
 
-    @Column(name = "role", nullable = false)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public User() {
+    }
 
     public User(String username, String password, String email, String firstName, String lastName, boolean enabled, boolean blocked, Role role) {
         this.username = username;
@@ -51,6 +60,15 @@ public class User extends BaseEntity {
         this.enabled = enabled;
         this.blocked = blocked;
         this.role = role;
+    }
+
+    @Override
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -115,8 +133,5 @@ public class User extends BaseEntity {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public User() {
     }
 }

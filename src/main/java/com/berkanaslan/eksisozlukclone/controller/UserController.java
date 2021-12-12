@@ -40,13 +40,13 @@ public class UserController extends BaseEntityController<User> {
         }
 
         Optional<User> optional = repository.getById(user.getId());
+
         if (optional.isPresent()) {
             User existing = optional.get();
 
-            if (user.getPassword() != null) {
-                existing.setPassword(passwordEncoder.encode(user.getPassword()));
-            }
-            repository.save(existing);
+            user.setPassword(existing.getPassword());
+
+            repository.save(user);
             return user.getId();
         }
 

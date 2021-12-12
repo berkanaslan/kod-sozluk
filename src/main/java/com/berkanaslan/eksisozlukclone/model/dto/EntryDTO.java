@@ -1,14 +1,14 @@
 package com.berkanaslan.eksisozlukclone.model.dto;
 
-import com.berkanaslan.eksisozlukclone.model.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class EntryDTO extends BaseEntity {
+public class EntryDTO {
 
+    private long id;
     private long titleId;
 
     @JsonProperty("user")
@@ -16,6 +16,15 @@ public class EntryDTO extends BaseEntity {
     private String comment;
     private Date createdAt;
     private Date updatedAt;
+
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public long getTitleId() {
         return titleId;
