@@ -35,7 +35,7 @@ public class UserController extends BaseEntityController<User> {
     }
 
     @Override
-    public long save(@RequestBody final User user) {
+    public User save(@RequestBody final User user) {
         if (user.getId() != 0) {
             return this.updateUser(user);
         }
@@ -69,7 +69,7 @@ public class UserController extends BaseEntityController<User> {
         return super.save(user);
     }
 
-    private long updateUser(@RequestBody final User user) {
+    private User updateUser(@RequestBody final User user) {
         if (user.getId() == 0) {
             return this.save(user);
         }
@@ -80,15 +80,14 @@ public class UserController extends BaseEntityController<User> {
             throw new IllegalArgumentException(ExceptionMessageUtil.getMessageByLocale("message.user_not_found"));
         }
 
-        final User existingUser = userOptional.get();
+        final User existingUserOnDB = userOptional.get();
+        copyNonNullProperties(user, existingUserOnDB);
 
-        // Set previous password if not declared. Otherwise, encode the new password.
-        if (user.getPassword() == null) {
-            user.setPassword(existingUser.getPassword());
-        } else {
+        // Encode the new password if declared.
+        if (user.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-        return super.save(user);
+        return super.save(existingUserOnDB);
     }
 }
