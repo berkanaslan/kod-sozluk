@@ -1,4 +1,4 @@
-package com.berkanaslan.eksisozlukclone.model.dto;
+package com.berkanaslan.eksisozlukclone.model.core;
 
 
 public class AuthenticationRequest {

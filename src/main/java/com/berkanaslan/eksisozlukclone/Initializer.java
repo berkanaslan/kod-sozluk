@@ -1,12 +1,17 @@
 package com.berkanaslan.eksisozlukclone;
 
+import com.berkanaslan.eksisozlukclone.model.Entry;
+import com.berkanaslan.eksisozlukclone.model.Topic;
 import com.berkanaslan.eksisozlukclone.model.User;
+import com.berkanaslan.eksisozlukclone.repository.TopicRepository;
 import com.berkanaslan.eksisozlukclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceSchemaCreatedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class Initializer implements ApplicationListener<DataSourceSchemaCreatedEvent> {
@@ -15,11 +20,15 @@ public class Initializer implements ApplicationListener<DataSourceSchemaCreatedE
     private UserRepository userRepository;
 
     @Autowired
+    private TopicRepository topicRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
     public void onApplicationEvent(DataSourceSchemaCreatedEvent event) {
         createSuperAdminUser();
+        createFirstTopicAndEntry();
     }
 
     private void createSuperAdminUser() {
@@ -37,5 +46,20 @@ public class Initializer implements ApplicationListener<DataSourceSchemaCreatedE
         superAdmin.setBlocked(false);
         superAdmin.setPassword(passwordEncoder.encode("password"));
         userRepository.save(superAdmin);
+    }
+
+    private void createFirstTopicAndEntry() {
+        if (topicRepository.findByName("pena").isPresent()) {
+            return;
+        }
+
+        final Topic topic = new Topic();
+        topic.setName("pena");
+
+        final Entry entry = new Entry();
+        entry.setTopic(topic);
+        entry.setMessage("gitar calmak icin kullanilan minik plastik garip nesne.");
+        topic.setEntries(List.of(entry));
+        topicRepository.save(topic);
     }
 }

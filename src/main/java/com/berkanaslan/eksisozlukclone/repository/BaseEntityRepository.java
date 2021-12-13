@@ -1,6 +1,6 @@
 package com.berkanaslan.eksisozlukclone.repository;
 
-import com.berkanaslan.eksisozlukclone.model.BaseEntity;
+import com.berkanaslan.eksisozlukclone.model.core.BaseEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 

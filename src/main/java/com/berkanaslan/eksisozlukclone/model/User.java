@@ -1,10 +1,12 @@
 package com.berkanaslan.eksisozlukclone.model;
 
 import com.berkanaslan.eksisozlukclone.audit.Auditable;
+import com.berkanaslan.eksisozlukclone.model.core.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -48,19 +50,8 @@ public class User extends Auditable implements BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
-    public User() {
-    }
-
-    public User(String username, String password, String email, String firstName, String lastName, boolean enabled, boolean blocked, Role role) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.enabled = enabled;
-        this.blocked = blocked;
-        this.role = role;
-    }
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Entry> favoriteEntries;
 
     @Override
     public long getId() {
@@ -135,18 +126,16 @@ public class User extends Auditable implements BaseEntity {
         this.role = role;
     }
 
+    public List<Entry> getFavoriteEntries() {
+        return favoriteEntries;
+    }
+
+    public void setFavoriteEntries(List<Entry> favoriteEntries) {
+        this.favoriteEntries = favoriteEntries;
+    }
+
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", enabled=" + enabled +
-                ", blocked=" + blocked +
-                ", role=" + role +
-                '}';
+        return "User{" + "id=" + id + ", username='" + username + '\'' + ", password='" + password + '\'' + ", email='" + email + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", enabled=" + enabled + ", blocked=" + blocked + ", role=" + role + '}';
     }
 }

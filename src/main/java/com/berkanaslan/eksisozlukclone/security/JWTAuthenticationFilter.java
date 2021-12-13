@@ -3,7 +3,7 @@ package com.berkanaslan.eksisozlukclone.security;
 import com.berkanaslan.eksisozlukclone.config.ConfigurationConstants;
 import com.berkanaslan.eksisozlukclone.model.Principal;
 import com.berkanaslan.eksisozlukclone.model.User;
-import com.berkanaslan.eksisozlukclone.model.dto.AuthenticationRequest;
+import com.berkanaslan.eksisozlukclone.model.core.AuthenticationRequest;
 import com.berkanaslan.eksisozlukclone.response.ResponseControllerAdvice;
 import com.berkanaslan.eksisozlukclone.response.ResponseWrapper;
 import com.berkanaslan.eksisozlukclone.service.UserService;
@@ -63,7 +63,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addHeader(ConfigurationConstants.TOKEN_HEADER, token);
         response.setStatus(200);
 
-        User user = userService.getUserInformation(principal.getUserId());
+        final User user = userService.getUserInformation(principal.getUserId());
         ResponseWrapper responseWrapper = new ResponseWrapper(ResponseControllerAdvice.SUCCESS_MESSAGE, user);
         response.getWriter().write(new ObjectMapper().writeValueAsString(responseWrapper));
     }

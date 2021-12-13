@@ -1,48 +1,33 @@
 package com.berkanaslan.eksisozlukclone.model;
 
+import com.berkanaslan.eksisozlukclone.audit.Auditable;
+import com.berkanaslan.eksisozlukclone.model.core.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.List;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Table(name = "entries")
-public class Entry implements BaseEntity {
+@Table
+public class Entry extends Auditable implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JsonIgnore
+    @ManyToOne(targetEntity = Topic.class)
+    private Topic topic;
 
-    @ManyToOne
-    @JoinColumn(name = "title_id")
-    private Title title;
+    @Column(nullable = false, length = 2048)
+    private String message;
 
-    @Column(name = "comment", nullable = false)
-    private String comment;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<User> favorites;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at")
-    private Date updatedAt;
-
-    public Entry() {
-    }
-
-    public Entry(User user, Title title, String comment, Date createdAt, Date updatedAt) {
-        this.user = user;
-        this.title = title;
-        this.comment = comment;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    private int favoritesCount;
 
     @Override
     public long getId() {
@@ -53,43 +38,40 @@ public class Entry implements BaseEntity {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Topic getTopic() {
+        return topic;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setTopic(Topic topic) {
+        this.topic = topic;
     }
 
-    public Title getTitle() {
-        return title;
+    public String getMessage() {
+        return message;
     }
 
-    public void setTitle(Title title) {
-        this.title = title;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public String getComment() {
-        return comment;
+    public List<User> getFavorites() {
+        return favorites;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment.toLowerCase();
+    public void setFavorites(List<User> favorites) {
+        this.favorites = favorites;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public int getFavoritesCount() {
+        return favoritesCount;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setFavoritesCount(int favoritesCount) {
+        this.favoritesCount = favoritesCount;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+    @Override
+    public String toString() {
+        return "Entry{" + "id=" + id + ", topic=" + topic + ", message='" + message + '\'' + ", favoritesCount=" + favoritesCount + '}';
     }
 }
