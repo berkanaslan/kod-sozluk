@@ -3,7 +3,6 @@ package com.berkanaslan.eksisozlukclone.security;
 import com.berkanaslan.eksisozlukclone.model.Principal;
 import com.berkanaslan.eksisozlukclone.model.User;
 import com.berkanaslan.eksisozlukclone.repository.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.authentication.*;
@@ -19,7 +18,6 @@ import java.util.Optional;
 
 @Service
 public class AuthenticationProviderImpl implements AuthenticationProvider {
-
 
     @Autowired
     private UserRepository userRepository;

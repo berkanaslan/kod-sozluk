@@ -1,18 +1,18 @@
 package com.berkanaslan.eksisozlukclone.controller;
 
-import com.berkanaslan.eksisozlukclone.model.Entry;
+import com.berkanaslan.eksisozlukclone.model.Topic;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping(path = EntryController.PATH)
-public class EntryController extends BaseEntityController<Entry> {
-    static final String PATH = "/entry";
+@RequestMapping(path = TopicController.PATH)
+public class TopicController extends BaseEntityController<Topic> {
+    static final String PATH = "/topic";
 
     @Override
-    public Class<Entry> getEntityClass() {
-        return Entry.class;
+    public Class<Topic> getEntityClass() {
+        return Topic.class;
     }
 
     @Override

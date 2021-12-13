@@ -1,4 +1,4 @@
-package com.berkanaslan.eksisozlukclone.model;
+package com.berkanaslan.eksisozlukclone.model.core;
 
 import javax.persistence.MappedSuperclass;
 

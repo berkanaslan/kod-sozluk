@@ -16,7 +16,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(path = UserController.PATH)
 public class UserController extends BaseEntityController<User> {
-    static final String PATH = "user";
+    static final String PATH = "/user";
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -74,7 +74,7 @@ public class UserController extends BaseEntityController<User> {
             return this.save(user);
         }
 
-        final Optional<User> userOptional = userRepository.getById(user.getId());
+        final Optional<User> userOptional = userRepository.findById(user.getId());
 
         if (userOptional.isEmpty()) {
             throw new IllegalArgumentException(ExceptionMessageUtil.getMessageByLocale("message.user_not_found"));

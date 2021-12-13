@@ -1,6 +1,6 @@
 package com.berkanaslan.eksisozlukclone.controller;
 
-import com.berkanaslan.eksisozlukclone.model.BaseEntity;
+import com.berkanaslan.eksisozlukclone.model.core.BaseEntity;
 import com.berkanaslan.eksisozlukclone.repository.BaseEntityRepository;
 import com.berkanaslan.eksisozlukclone.util.ExceptionMessageUtil;
 import org.springframework.beans.BeanUtils;
