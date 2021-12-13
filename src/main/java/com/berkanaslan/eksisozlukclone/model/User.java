@@ -32,7 +32,10 @@ public class User extends Auditable implements BaseEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
     private String firstName;
+
+    @Column(nullable = false)
     private String lastName;
 
     @Column(nullable = false)
@@ -130,5 +133,20 @@ public class User extends Auditable implements BaseEntity {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", enabled=" + enabled +
+                ", blocked=" + blocked +
+                ", role=" + role +
+                '}';
     }
 }

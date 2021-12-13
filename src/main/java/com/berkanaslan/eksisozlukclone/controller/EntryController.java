@@ -42,7 +42,7 @@ public class EntryController extends BaseEntityController<Entry> {
     }
 
     @Override
-    public long save(@RequestBody Entry entry) {
+    public Entry save(@RequestBody Entry entry) {
         if (entry.getComment() == null)
             throw new RuntimeException("Entry can not be null!");
 
@@ -62,9 +62,7 @@ public class EntryController extends BaseEntityController<Entry> {
         else
             entry.setUpdatedAt(new Date());
 
-        super.save(entry);
-
-        return entry.getId();
+        return super.save(entry);
     }
 
     @GetMapping(path = "/user/{userId}")
