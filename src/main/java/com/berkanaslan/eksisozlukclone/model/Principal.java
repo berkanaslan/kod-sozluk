@@ -2,13 +2,11 @@ package com.berkanaslan.eksisozlukclone.model;
 
 
 public class Principal {
-
     private static final String DELIMITER = "::";
 
     private final long userId;
     private final String username;
     private final String jwtString;
-
 
     private Principal(long userId, String username) {
         this.userId = userId;
@@ -35,18 +33,15 @@ public class Principal {
 
 
     public static Principal createFrom(User user) {
-        if (user.getFirstName() != null) {
-            return new Principal(user.getId(), user.getUsername());
-        }
-
         return new Principal(user.getId(), user.getUsername());
     }
 
     public static Principal parseFromJWTString(String jwtString) {
+        String[] splittedAuthenticatedUserStr = jwtString.split(DELIMITER);
 
-        String[] splitedAuthenticatedUserStr = jwtString.split(DELIMITER);
-        long id = Long.parseLong(splitedAuthenticatedUserStr[0]);
-        String username = splitedAuthenticatedUserStr[1];
+        final long id = Long.parseLong(splittedAuthenticatedUserStr[0]);
+
+        final String username = splittedAuthenticatedUserStr[1];
 
         return new Principal(id, username);
     }

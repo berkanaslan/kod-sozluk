@@ -1,61 +1,65 @@
 package com.berkanaslan.eksisozlukclone;
 
-import com.berkanaslan.eksisozlukclone.controller.UserController;
+import com.berkanaslan.eksisozlukclone.model.Entry;
+import com.berkanaslan.eksisozlukclone.model.Topic;
 import com.berkanaslan.eksisozlukclone.model.User;
+import com.berkanaslan.eksisozlukclone.repository.TopicRepository;
+import com.berkanaslan.eksisozlukclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceSchemaCreatedEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
-public class Initializer implements ApplicationListener<ApplicationReadyEvent> {
+public class Initializer implements ApplicationListener<DataSourceSchemaCreatedEvent> {
 
-    private final UserController userController;
+    @Autowired
+    private UserRepository userRepository;
 
-    public Initializer(UserController userController) {
-        this.userController = userController;
-    }
+    @Autowired
+    private TopicRepository topicRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
-    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-        createUsers();
+    public void onApplicationEvent(DataSourceSchemaCreatedEvent event) {
+        createSuperAdminUser();
+        createFirstTopicAndEntry();
     }
 
+    private void createSuperAdminUser() {
+        if (userRepository.findByUsername(User.SUPER_ADMIN_USERNAME).isPresent()) {
+            return;
+        }
 
-    private void createUsers() {
-        User user = new User();
-        user.setUsername("admin");
-        user.setPassword("password");
-        user.setEnabled(true);
-        user.setBlocked(false);
-        user.setFirstName("Berkan");
-        user.setLastName("Aslan");
-        user.setEmail("berkan@aslan.com");
-        user.setRole(User.Role.ADMIN);
-        userController.save(user);
+        User superAdmin = new User();
+        superAdmin.setUsername(User.SUPER_ADMIN_USERNAME);
+        superAdmin.setEmail("aslnberkan@gmail.com");
+        superAdmin.setFirstName("Super");
+        superAdmin.setLastName("Admin");
+        superAdmin.setRole(User.Role.ADMIN);
+        superAdmin.setEnabled(true);
+        superAdmin.setBlocked(false);
+        superAdmin.setPassword(passwordEncoder.encode("password"));
+        userRepository.save(superAdmin);
+    }
 
-        User user2 = new User();
-        user2.setUsername("user1");
-        user2.setPassword("password");
-        user2.setEnabled(true);
-        user2.setBlocked(false);
-        user2.setFirstName("Büşra");
-        user2.setLastName("Boyacı");
-        user2.setEmail("busra@gmail.com");
-        user2.setRole(User.Role.USER);
-        userController.save(user2);
+    private void createFirstTopicAndEntry() {
+        if (topicRepository.findByName("pena").isPresent()) {
+            return;
+        }
 
-        User user3 = new User();
-        user3.setUsername("user2");
-        user3.setPassword("password");
-        user3.setEnabled(true);
-        user3.setBlocked(false);
-        user3.setFirstName("Umut");
-        user3.setLastName("Ozkurt");
-        user3.setEmail("rumut@ozkurt.com");
-        user3.setRole(User.Role.USER);
-        userController.save(user3);
+        final Topic topic = new Topic();
+        topic.setName("pena");
 
+        final Entry entry = new Entry();
+        entry.setTopic(topic);
+        entry.setMessage("gitar calmak icin kullanilan minik plastik garip nesne.");
+        topic.setEntries(List.of(entry));
+        topicRepository.save(topic);
     }
 }

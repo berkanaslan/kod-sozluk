@@ -5,7 +5,6 @@ import com.berkanaslan.eksisozlukclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.Optional;
 
 
@@ -17,8 +16,11 @@ public class UserService {
 
     public User getUserInformation(long id) throws RuntimeException {
         Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent())
+
+        if (optionalUser.isPresent()) {
             return optionalUser.get();
+        }
+        
         throw new RuntimeException("User not found!");
     }
 }

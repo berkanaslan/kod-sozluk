@@ -3,6 +3,7 @@ package com.berkanaslan.eksisozlukclone.controller;
 
 import com.berkanaslan.eksisozlukclone.model.User;
 import com.berkanaslan.eksisozlukclone.repository.UserRepository;
+import com.berkanaslan.eksisozlukclone.util.ExceptionMessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,12 +15,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(path = UserController.PATH)
-public class UserController extends BaseEntityController<User> {
-
-    static final String PATH = "user";
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+public class UserController extends BaseEntityController<User, User.Info> {
+    static final String PATH = "/user";
 
     @Override
     public Class<User> getEntityClass() {
@@ -27,30 +24,76 @@ public class UserController extends BaseEntityController<User> {
     }
 
     @Override
+    public Class<User.Info> getEntityInfoClass() {
+        return User.Info.class;
+    }
+
+    @Override
     public String getRequestPath() {
         return PATH;
     }
 
-    @Override
-    public long save(@RequestBody User user) {
-        UserRepository repository = (UserRepository) getBaseEntityRepository();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-        if (user.getId() == 0 && user.getPassword() == null) {
-            throw new RuntimeException("Password is required.");
+    @Override
+    public User save(@RequestBody final User user) {
+        final UserRepository userRepository = ((UserRepository) getBaseEntityRepository());
+
+        if (user.getId() != 0) {
+            return this.updateUser(user);
         }
 
-        Optional<User> optional = repository.getById(user.getId());
-        if (optional.isPresent()) {
-            User existing = optional.get();
-
-            if (user.getPassword() != null) {
-                existing.setPassword(passwordEncoder.encode(user.getPassword()));
-            }
-            repository.save(existing);
-            return user.getId();
+        if (user.getPassword() == null) {
+            throw new IllegalArgumentException(ExceptionMessageUtil.getMessageByLocale("message.password_is_required"));
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        if (user.getUsername() == null) {
+            throw new IllegalArgumentException(ExceptionMessageUtil.getMessageByLocale("message.username_is_required"));
+        }
+
+        if (user.getEmail() == null) {
+            throw new IllegalArgumentException(ExceptionMessageUtil.getMessageByLocale("message.email_is_required"));
+        }
+
+        final Optional<User> isUsernameAlreadyUsed = userRepository.findByUsername(user.getUsername());
+
+        if (isUsernameAlreadyUsed.isPresent()) {
+            throw new IllegalArgumentException(ExceptionMessageUtil.getMessageByLocale("message.username_already_using"));
+        }
+
+        final Optional<User> isEmailAlreadyUsed = userRepository.findByEmail(user.getEmail());
+
+        if (isEmailAlreadyUsed.isPresent()) {
+            throw new IllegalArgumentException(ExceptionMessageUtil.getMessageByLocale("message.email_already_using"));
+        }
+
         return super.save(user);
+    }
+
+    private User updateUser(@RequestBody final User user) {
+        final UserRepository userRepository = ((UserRepository) getBaseEntityRepository());
+
+        if (user.getId() == 0) {
+            return this.save(user);
+        }
+
+        final Optional<User> userOptional = userRepository.findById(user.getId());
+
+        if (userOptional.isEmpty()) {
+            throw new IllegalArgumentException(ExceptionMessageUtil.getMessageByLocale("message.user_not_found"));
+        }
+
+        final User existingUserOnDB = userOptional.get();
+        copyNonNullProperties(user, existingUserOnDB);
+
+        // Encode the new password if declared.
+        if (user.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        return super.save(existingUserOnDB);
     }
 }
