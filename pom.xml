@@ -54,6 +54,14 @@
         </dependency>
         <!-- Spring Boot -->
 
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+        </dependency>
+        <!-- Lombok -->
+
         <!-- MySQL -->
         <dependency>
             <groupId>mysql</groupId>
