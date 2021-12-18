@@ -10,10 +10,10 @@
     </parent>
 
     <groupId>com.berkanaslan</groupId>
-    <artifactId>eksi-sozluk-clone</artifactId>
+    <artifactId>kod-sozluk</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Ekşi Sözlük Clone</name>
-    <description>Ekşi Sözlük Klon Projesi</description>
+    <name>Kod Sözlük</name>
+    <description>Developer topluluğu için sözlük.</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -114,7 +114,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
-        <finalName>eksi-sozluk-clone</finalName>
+        <finalName>kod-sozluk</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
