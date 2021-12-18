@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = EntryController.PATH)
-public class EntryController extends BaseEntityController<Entry> {
+public class EntryController extends BaseEntityController<Entry, Entry.Info> {
     static final String PATH = "/entry";
 
     @Override
@@ -16,8 +16,14 @@ public class EntryController extends BaseEntityController<Entry> {
     }
 
     @Override
+    public Class<Entry.Info> getEntityInfoClass() {
+        return Entry.Info.class;
+    }
+
+    @Override
     public String getRequestPath() {
         return PATH;
     }
+
 
 }

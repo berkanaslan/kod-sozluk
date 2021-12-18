@@ -15,14 +15,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(path = UserController.PATH)
-public class UserController extends BaseEntityController<User> {
+public class UserController extends BaseEntityController<User, User.Info> {
     static final String PATH = "/user";
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Override
     public Class<User> getEntityClass() {
@@ -30,12 +24,22 @@ public class UserController extends BaseEntityController<User> {
     }
 
     @Override
+    public Class<User.Info> getEntityInfoClass() {
+        return User.Info.class;
+    }
+
+    @Override
     public String getRequestPath() {
         return PATH;
     }
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public User save(@RequestBody final User user) {
+        final UserRepository userRepository = ((UserRepository) getBaseEntityRepository());
+
         if (user.getId() != 0) {
             return this.updateUser(user);
         }
@@ -70,6 +74,8 @@ public class UserController extends BaseEntityController<User> {
     }
 
     private User updateUser(@RequestBody final User user) {
+        final UserRepository userRepository = ((UserRepository) getBaseEntityRepository());
+
         if (user.getId() == 0) {
             return this.save(user);
         }
