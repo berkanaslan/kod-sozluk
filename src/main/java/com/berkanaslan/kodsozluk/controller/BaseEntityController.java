@@ -73,7 +73,7 @@ public abstract class BaseEntityController<T extends BaseEntity, I extends BaseE
             return optionalT.get();
         }
 
-        throw new RuntimeException(ExceptionMessageUtil.getMessageByLocale("message.no_such") + " " + getEntityClass().getSimpleName());
+        throw new RuntimeException(String.format(ExceptionMessageUtil.getMessageByLocale("message.no_such"), getEntityClass().getSimpleName()));
     }
 
     // -------------------------------------------------------------------------

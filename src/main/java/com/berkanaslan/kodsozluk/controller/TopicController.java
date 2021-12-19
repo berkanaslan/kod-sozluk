@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = TopicController.PATH)
 public class TopicController extends BaseEntityController<Topic, Topic.Info> {
-    static final String PATH = "/topic";
+    public static final String PATH = "/topic";
 
     @Override
     public Class<Topic> getEntityClass() {

@@ -1,8 +1,11 @@
 package com.berkanaslan.kodsozluk;
 
+import com.berkanaslan.kodsozluk.controller.TopicController;
 import com.berkanaslan.kodsozluk.model.Entry;
+import com.berkanaslan.kodsozluk.model.Head;
 import com.berkanaslan.kodsozluk.model.Topic;
 import com.berkanaslan.kodsozluk.model.User;
+import com.berkanaslan.kodsozluk.repository.HeadRepository;
 import com.berkanaslan.kodsozluk.repository.TopicRepository;
 import com.berkanaslan.kodsozluk.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +23,19 @@ public class Initializer implements ApplicationListener<DataSourceSchemaCreatedE
     private UserRepository userRepository;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private TopicRepository topicRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private HeadRepository headRepository;
 
     @Override
     public void onApplicationEvent(DataSourceSchemaCreatedEvent event) {
         createSuperAdminUser();
         createFirstTopicAndEntry();
+        createHeads();
     }
 
     private void createSuperAdminUser() {
@@ -61,5 +68,23 @@ public class Initializer implements ApplicationListener<DataSourceSchemaCreatedE
         entry.setMessage("gitar calmak icin kullanilan minik plastik garip nesne.");
         topic.setEntries(List.of(entry));
         topicRepository.save(topic);
+    }
+
+    private void createHeads() {
+        if (headRepository.findById(1L).isPresent()) {
+            return;
+        }
+
+        final String leadingPath = TopicController.PATH;
+
+        headRepository.save(new Head("bugün", leadingPath + "/today"));
+        headRepository.save(new Head("gündem", leadingPath + "/trend"));
+        headRepository.save(new Head("debe", leadingPath + "/popular"));
+        headRepository.save(new Head("sorunsallar", leadingPath + "/issues"));
+        headRepository.save(new Head("takip", leadingPath + "/following"));
+        headRepository.save(new Head("tarihte bugün", leadingPath + "/today-in-history"));
+        headRepository.save(new Head("son", leadingPath + "/latest"));
+        headRepository.save(new Head("kenar", leadingPath + "/draft"));
+        headRepository.save(new Head("çaylaklar", leadingPath + "/noobs"));
     }
 }
