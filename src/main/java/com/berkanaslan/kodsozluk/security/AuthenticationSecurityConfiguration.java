@@ -2,6 +2,7 @@ package com.berkanaslan.kodsozluk.security;
 
 import com.berkanaslan.kodsozluk.config.ConfigurationConstants;
 import com.berkanaslan.kodsozluk.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,7 @@ public class AuthenticationSecurityConfiguration extends WebSecurityConfigurerAd
 
     @Autowired
     private UserService userService;
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -66,5 +68,4 @@ public class AuthenticationSecurityConfiguration extends WebSecurityConfigurerAd
 
         return source;
     }
-
 }
