@@ -1,6 +1,20 @@
- | |           | |                   | |     | |
- | | _____   __| |______ ___  ___ ___| |_   _| | __
- | |/ / _ \ / _` |______/ __|/ _ \_  / | | | | |/ /
- |   < (_) | (_| |      \__ \ (_) / /| | |_| |   <
- |_|\_\___/ \__,_|      |___/\___/___|_|\__,_|_|\_\
+
+                                              dddddddd
+kkkkkkkk                                      d::::::d                                                   lllllll                   kkkkkkkk
+k::::::k                                      d::::::d                                                   l:::::l                   k::::::k
+k::::::k                                      d::::::d                                                   l:::::l                   k::::::k
+k::::::k                                      d:::::d                                                    l:::::l                   k::::::k
+ k:::::k    kkkkkkk ooooooooooo       ddddddddd:::::d     ssssssssss      ooooooooooo   zzzzzzzzzzzzzzzzz l::::l uuuuuu    uuuuuu   k:::::k    kkkkkkk
+ k:::::k   k:::::koo:::::::::::oo   dd::::::::::::::d   ss::::::::::s   oo:::::::::::oo z:::::::::::::::z l::::l u::::u    u::::u   k:::::k   k:::::k
+ k:::::k  k:::::ko:::::::::::::::o d::::::::::::::::d ss:::::::::::::s o:::::::::::::::oz::::::::::::::z  l::::l u::::u    u::::u   k:::::k  k:::::k
+ k:::::k k:::::k o:::::ooooo:::::od:::::::ddddd:::::d s::::::ssss:::::so:::::ooooo:::::ozzzzzzzz::::::z   l::::l u::::u    u::::u   k:::::k k:::::k
+ k::::::k:::::k  o::::o     o::::od::::::d    d:::::d  s:::::s  ssssss o::::o     o::::o      z::::::z    l::::l u::::u    u::::u   k::::::k:::::k
+ k:::::::::::k   o::::o     o::::od:::::d     d:::::d    s::::::s      o::::o     o::::o     z::::::z     l::::l u::::u    u::::u   k:::::::::::k
+ k:::::::::::k   o::::o     o::::od:::::d     d:::::d       s::::::s   o::::o     o::::o    z::::::z      l::::l u::::u    u::::u   k:::::::::::k
+ k::::::k:::::k  o::::o     o::::od:::::d     d:::::d ssssss   s:::::s o::::o     o::::o   z::::::z       l::::l u:::::uuuu:::::u   k::::::k:::::k
+k::::::k k:::::k o:::::ooooo:::::od::::::ddddd::::::dds:::::ssss::::::so:::::ooooo:::::o  z::::::zzzzzzzzl::::::lu:::::::::::::::uuk::::::k k:::::k
+k::::::k  k:::::ko:::::::::::::::o d:::::::::::::::::ds::::::::::::::s o:::::::::::::::o z::::::::::::::zl::::::l u:::::::::::::::uk::::::k  k:::::k
+k::::::k   k:::::koo:::::::::::oo   d:::::::::ddd::::d s:::::::::::ss   oo:::::::::::oo z:::::::::::::::zl::::::l  uu::::::::uu:::uk::::::k   k:::::k
+kkkkkkkk    kkkkkkk ooooooooooo      ddddddddd   ddddd  sssssssssss       ooooooooooo   zzzzzzzzzzzzzzzzzllllllll    uuuuuuuu  uuuukkkkkkkk    kkkkkkk
+
 ${Ansi.RED} See details: @berkanaslan/kod-sozluk :: Spring Boot${spring-boot.formatted-version} :: ${Ansi.DEFAULT}

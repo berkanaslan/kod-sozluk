@@ -2,6 +2,7 @@ package com.berkanaslan.kodsozluk.security;
 
 import com.berkanaslan.kodsozluk.config.ConfigurationConstants;
 import com.berkanaslan.kodsozluk.response.ResponseWrapper;
+import com.berkanaslan.kodsozluk.util.ExceptionMessageUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +38,7 @@ public class AuthorizationSecurityConfiguration extends WebSecurityConfigurerAda
                         ConfigurationConstants.ENTRY_URL,
                         ConfigurationConstants.TITLE_URL,
                         "/api-docs/**",
+                        "/head/**",
                         "/topic/**",
                         "/entry/**",
                         "/api-docs.html/**",
@@ -57,7 +59,8 @@ public class AuthorizationSecurityConfiguration extends WebSecurityConfigurerAda
     }
 
     private void handleForbiddenException(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
-        ResponseWrapper responseWrapper = new ResponseWrapper("Forbidden!", "Forbidden!");
+        ResponseWrapper responseWrapper = new ResponseWrapper(ExceptionMessageUtil.getMessageByLocale("message.forbidden"),
+                ExceptionMessageUtil.getMessageByLocale("message.forbidden"));
 
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
