@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EntryRepository extends BaseEntityRepository<Entry> {
-    Page<Entry.Info> findAllByTopicIdOrderByIdAsc(long topicId1, Pageable pg);
+    Page<Entry.Info> findAllByTopicId(long topicId1, Pageable pg);
 }
