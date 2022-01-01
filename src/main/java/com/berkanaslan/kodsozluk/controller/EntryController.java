@@ -36,6 +36,6 @@ public class EntryController extends BaseEntityController<Entry, Entry.Info> {
             @RequestParam(name = "sd", defaultValue = SORT_DIRECTION_ASC, required = false) String sortDirection) {
 
         final Pageable pageable = preparePageRequest(page, size, sortBy, sortDirection);
-        return ((EntryRepository) getBaseEntityRepository()).findAllByTopicIdOrderByIdAsc(topicId, pageable);
+        return ((EntryRepository) getBaseEntityRepository()).findAllByTopicId(topicId, pageable);
     }
 }
