@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,7 +29,7 @@ public class Entry extends Auditable implements BaseEntity {
     private long id;
 
     @JsonIgnore
-    @ManyToOne(targetEntity = Topic.class)
+    @ManyToOne(targetEntity = Topic.class, optional = false)
     private Topic topic;
 
     @LowerCase
@@ -50,5 +51,14 @@ public class Entry extends Auditable implements BaseEntity {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public interface Info extends BaseEntity.Info {
         String getMessage();
+
+        String getCreatedBy();
+
+        Date getCreationDate();
+
+        Date getLastModifiedDate();
+
+        int getFavoritesCount();
+
     }
 }

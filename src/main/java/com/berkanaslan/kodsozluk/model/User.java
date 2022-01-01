@@ -15,7 +15,7 @@ import java.util.Locale;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Table(indexes = {@Index(columnList = "username")})
+@Table(name = "user_table", indexes = {@Index(columnList = "username")})
 @Getter
 @Setter
 @NoArgsConstructor

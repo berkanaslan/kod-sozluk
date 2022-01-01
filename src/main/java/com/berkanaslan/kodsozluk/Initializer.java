@@ -8,7 +8,6 @@ import com.berkanaslan.kodsozluk.model.User;
 import com.berkanaslan.kodsozluk.repository.HeadRepository;
 import com.berkanaslan.kodsozluk.repository.TopicRepository;
 import com.berkanaslan.kodsozluk.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceSchemaCreatedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,17 +18,17 @@ import java.util.List;
 @Component
 public class Initializer implements ApplicationListener<DataSourceSchemaCreatedEvent> {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final TopicRepository topicRepository;
+    private final HeadRepository headRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private TopicRepository topicRepository;
-
-    @Autowired
-    private HeadRepository headRepository;
+    public Initializer(UserRepository userRepository, PasswordEncoder passwordEncoder, TopicRepository topicRepository, HeadRepository headRepository) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.topicRepository = topicRepository;
+        this.headRepository = headRepository;
+    }
 
     @Override
     public void onApplicationEvent(DataSourceSchemaCreatedEvent event) {

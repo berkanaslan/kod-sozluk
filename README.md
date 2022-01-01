@@ -18,6 +18,29 @@ k::::::k   k:::::koo:::::::::::oo   d:::::::::ddd::::d s:::::::::::ss   oo::::::
 kkkkkkkk    kkkkkkk ooooooooooo      ddddddddd   ddddd  sssssssssss       ooooooooooo   zzzzzzzzzzzzzzzzzllllllll    uuuuuuuu  uuuukkkkkkkk    kkkkkkk
 ```
 
+### 01.01.2021 UPDATE
+
+The file which name is 'application-prod.properties' has been ignored now. If you want to use the prod profile, create
+your own 'application-prod.properties' file.
+
+#### application-prod.properties:
+
+```  
+# ------------------------------------------------------- #
+# This configuration is for the production environment.   #
+# ------------------------------------------------------- #
+# ------------------------------
+# MySQL Connector
+# ------------------------------
+spring.datasource.url=jdbc:YOUR_URL
+spring.datasource.username=YOUR_USERNAME
+spring.datasource.password=YOUR_PASSWORD
+# ------------------------------
+# Spring JPA
+# ------------------------------
+spring.jpa.hibernate.ddl-auto=none
+```
+
 # kod-sozluk
 
 kod-sozluk is a server-side clone of eksisozluk.com.
