@@ -62,13 +62,6 @@
         </dependency>
         <!-- Lombok -->
 
-        <!-- MySQL -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <!-- MySQL -->
-
         <!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -131,6 +124,15 @@
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
+            <dependencies>
+                <!-- Microsoft SQL -->
+                <dependency>
+                    <groupId>com.microsoft.sqlserver</groupId>
+                    <artifactId>mssql-jdbc</artifactId>
+                    <version>7.4.1.jre8</version>
+                </dependency>
+                <!--  Microsoft SQL -->
+            </dependencies>
             <properties>
                 <spring.boot.profile>prod</spring.boot.profile>
             </properties>
@@ -142,6 +144,14 @@
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
+            <dependencies>
+                <!-- MySQL -->
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                </dependency>
+                <!-- MySQL -->
+            </dependencies>
             <properties>
                 <spring.boot.profile>dev</spring.boot.profile>
             </properties>
