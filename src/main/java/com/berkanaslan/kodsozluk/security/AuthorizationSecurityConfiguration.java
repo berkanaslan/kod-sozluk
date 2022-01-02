@@ -1,8 +1,7 @@
 package com.berkanaslan.kodsozluk.security;
 
-import com.berkanaslan.kodsozluk.config.ConfigurationConstants;
 import com.berkanaslan.kodsozluk.response.ResponseWrapper;
-import com.berkanaslan.kodsozluk.util.ExceptionMessageUtil;
+import com.berkanaslan.kodsozluk.util.I18NUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -34,16 +33,18 @@ public class AuthorizationSecurityConfiguration extends WebSecurityConfigurerAda
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/actuator/**",
-                        ConfigurationConstants.ENTRY_URL,
-                        ConfigurationConstants.TITLE_URL,
+                .antMatchers(HttpMethod.GET,
+                        "/actuator/**",
                         "/api-docs/**",
-                        "/head/**",
-                        "/topic/**",
-                        "/entry/**",
                         "/api-docs.html/**",
                         "/swagger-ui.html",
-                        "/swagger-ui/**").permitAll()
+                        "/swagger-ui/**",
+                        "/head/**",
+                        "/topic",
+                        "/entry",
+                        "/entry/topic/{id}"
+                ).permitAll()
+                .antMatchers("/user/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(this::handleForbiddenException)
@@ -59,8 +60,8 @@ public class AuthorizationSecurityConfiguration extends WebSecurityConfigurerAda
     }
 
     private void handleForbiddenException(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
-        ResponseWrapper responseWrapper = new ResponseWrapper(ExceptionMessageUtil.getMessageByLocale("message.forbidden"),
-                ExceptionMessageUtil.getMessageByLocale("message.forbidden"));
+        ResponseWrapper responseWrapper = new ResponseWrapper(I18NUtil.getMessageByLocale("message.forbidden"),
+                I18NUtil.getMessageByLocale("message.forbidden"));
 
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);

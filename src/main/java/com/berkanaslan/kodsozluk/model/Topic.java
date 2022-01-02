@@ -3,11 +3,11 @@ package com.berkanaslan.kodsozluk.model;
 import com.berkanaslan.kodsozluk.audit.Auditable;
 import com.berkanaslan.kodsozluk.config.LowerCase;
 import com.berkanaslan.kodsozluk.model.core.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,7 +19,6 @@ import java.util.Locale;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 public class Topic extends Auditable implements BaseEntity {
 
     @Id
@@ -30,7 +29,8 @@ public class Topic extends Auditable implements BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "topic", targetEntity = Entry.class)
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "topic", targetEntity = Entry.class)
     private List<Entry> entries;
 
     @PrePersist

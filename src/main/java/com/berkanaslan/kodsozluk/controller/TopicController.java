@@ -2,7 +2,7 @@ package com.berkanaslan.kodsozluk.controller;
 
 import com.berkanaslan.kodsozluk.model.Topic;
 import com.berkanaslan.kodsozluk.repository.TopicRepository;
-import com.berkanaslan.kodsozluk.util.ExceptionMessageUtil;
+import com.berkanaslan.kodsozluk.util.I18NUtil;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +31,7 @@ public class TopicController extends BaseEntityController<Topic, Topic.Info> {
     @Override
     public Topic save(@RequestBody final Topic topic) {
         if (topic.getName() == null || topic.getName().isEmpty()) {
-            throw new IllegalArgumentException(ExceptionMessageUtil.getMessageByLocale("message.topic_name_can_not_be_null"));
+            throw new IllegalArgumentException(I18NUtil.getMessageByLocale("message.topic_name_can_not_be_null"));
         }
 
         Topic existTopic = ((TopicRepository) getBaseEntityRepository()).findByName(topic.getName()).orElse(null);

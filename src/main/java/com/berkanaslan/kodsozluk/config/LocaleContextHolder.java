@@ -15,6 +15,10 @@ public class LocaleContextHolder {
     }
 
     public static String getLocaleKey() {
+        if (LOCALE.get() == null) {
+            return "tr-TR";
+        }
+
         return LOCALE.get();
     }
 

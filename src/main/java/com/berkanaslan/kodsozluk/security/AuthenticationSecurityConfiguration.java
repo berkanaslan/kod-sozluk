@@ -2,7 +2,6 @@ package com.berkanaslan.kodsozluk.security;
 
 import com.berkanaslan.kodsozluk.config.ConfigurationConstants;
 import com.berkanaslan.kodsozluk.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,9 +30,9 @@ public class AuthenticationSecurityConfiguration extends WebSecurityConfigurerAd
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.antMatcher(ConfigurationConstants.LOGIN_URL)
+        http.antMatcher(ConfigurationConstants.LOGIN)
                 .cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, ConfigurationConstants.LOGIN_URL).permitAll()
+                .antMatchers(HttpMethod.POST, ConfigurationConstants.LOGIN).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(jwtAuthenticationFilter(authenticationManager()));
@@ -43,7 +42,7 @@ public class AuthenticationSecurityConfiguration extends WebSecurityConfigurerAd
 
     private JWTAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager) {
         JWTAuthenticationFilter jwtAuthenticationFilter = new JWTAuthenticationFilter(authenticationManager, userService);
-        jwtAuthenticationFilter.setFilterProcessesUrl(ConfigurationConstants.LOGIN_URL);
+        jwtAuthenticationFilter.setFilterProcessesUrl(ConfigurationConstants.LOGIN);
         return jwtAuthenticationFilter;
     }
 
@@ -61,7 +60,6 @@ public class AuthenticationSecurityConfiguration extends WebSecurityConfigurerAd
         Stream.of(HttpMethod.values()).forEach(m -> corsConfiguration.addAllowedMethod(m.name()));
 
         corsConfiguration.addExposedHeader(ConfigurationConstants.TOKEN_HEADER);
-        corsConfiguration.addExposedHeader(ConfigurationConstants.AUTHENTICATION_ERROR_HEADER_KEY);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
