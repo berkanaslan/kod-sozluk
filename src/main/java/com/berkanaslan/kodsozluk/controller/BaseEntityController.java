@@ -2,7 +2,7 @@ package com.berkanaslan.kodsozluk.controller;
 
 import com.berkanaslan.kodsozluk.model.core.BaseEntity;
 import com.berkanaslan.kodsozluk.repository.BaseEntityRepository;
-import com.berkanaslan.kodsozluk.util.ExceptionMessageUtil;
+import com.berkanaslan.kodsozluk.util.I18NUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -73,7 +73,7 @@ public abstract class BaseEntityController<T extends BaseEntity, I extends BaseE
             return optionalT.get();
         }
 
-        throw new RuntimeException(String.format(ExceptionMessageUtil.getMessageByLocale("message.no_such"), getEntityClass().getSimpleName()));
+        throw new RuntimeException(String.format(I18NUtil.getMessageByLocale("message.no_such"), getEntityClass().getSimpleName()));
     }
 
     // -------------------------------------------------------------------------

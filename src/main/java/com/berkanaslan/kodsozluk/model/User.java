@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Locale;
 
 @Entity
@@ -24,6 +25,8 @@ public class User extends Auditable implements BaseEntity {
     public static final String SYSTEM = "SYSTEM";
     public static final String SUPER_ADMIN_USERNAME = "superadmin";
 
+    enum Gender {FEMALE, MALE, OTHER, UNDEFINED}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -36,21 +39,20 @@ public class User extends Auditable implements BaseEntity {
     @Column(nullable = false, unique = true, updatable = false)
     private String username;
 
+    @Column(nullable = false, unique = true)
+    private String email;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
-    @LowerCase
-    @Column(nullable = false)
-    private String firstName;
-
-    @LowerCase
-    @Column(nullable = false)
-    private String lastName;
+    @Temporal(TemporalType.DATE)
+    @Column(updatable = false)
+    private Date dateOfBirth;
 
     @Column(nullable = false)
     private boolean enabled = true;
@@ -66,8 +68,6 @@ public class User extends Auditable implements BaseEntity {
     @PreUpdate
     public void preOperations() {
         setUsername(getUsername().toLowerCase(Locale.ROOT));
-        setFirstName(getFirstName().toLowerCase(Locale.ROOT));
-        setLastName(getLastName().toLowerCase(Locale.ROOT));
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

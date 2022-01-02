@@ -30,7 +30,7 @@ your own 'application-prod.properties' file.
 # This configuration is for the production environment.   #
 # ------------------------------------------------------- #
 # ------------------------------
-# MySQL Connector
+# Connector
 # ------------------------------
 spring.datasource.url=jdbc:YOUR_URL
 spring.datasource.username=YOUR_USERNAME

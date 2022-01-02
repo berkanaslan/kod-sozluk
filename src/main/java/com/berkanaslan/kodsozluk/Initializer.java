@@ -45,8 +45,6 @@ public class Initializer implements ApplicationListener<DataSourceSchemaCreatedE
         User superAdmin = new User();
         superAdmin.setUsername(User.SUPER_ADMIN_USERNAME);
         superAdmin.setEmail("aslnberkan@gmail.com");
-        superAdmin.setFirstName("Super");
-        superAdmin.setLastName("Admin");
         superAdmin.setRole(User.Role.ADMIN);
         superAdmin.setEnabled(true);
         superAdmin.setBlocked(false);
@@ -84,6 +82,6 @@ public class Initializer implements ApplicationListener<DataSourceSchemaCreatedE
         headRepository.save(new Head("tarihte bugün", leadingPath + "/today-in-history"));
         headRepository.save(new Head("son", leadingPath + "/latest"));
         headRepository.save(new Head("kenar", leadingPath + "/draft"));
-        headRepository.save(new Head("çaylaklar", leadingPath + "/noobs"));
+        headRepository.save(new Head("çaylaklar", leadingPath + "/rookie"));
     }
 }
