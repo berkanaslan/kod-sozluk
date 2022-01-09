@@ -40,7 +40,7 @@ public class AuthorizationSecurityConfiguration extends WebSecurityConfigurerAda
                         "/swagger-ui.html",
                         "/swagger-ui/**",
                         "/head/**",
-                        "/topic",
+                        "/topic/**",
                         "/entry",
                         "/entry/topic/{id}"
                 ).permitAll()
