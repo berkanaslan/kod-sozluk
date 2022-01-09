@@ -1,5 +1,7 @@
 package com.berkanaslan.kodsozluk.controller;
 
+import com.berkanaslan.kodsozluk.model.Principal;
+import com.berkanaslan.kodsozluk.model.User;
 import com.berkanaslan.kodsozluk.model.core.BaseEntity;
 import com.berkanaslan.kodsozluk.repository.BaseEntityRepository;
 import com.berkanaslan.kodsozluk.util.I18NUtil;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -89,6 +92,12 @@ public abstract class BaseEntityController<T extends BaseEntity, I extends BaseE
     // -------------------------------------------------------------------------
     @DeleteMapping("{id}")
     public void delete(@PathVariable(name = "id") long id) {
+        final Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final String username = principal.getUsername();
+
+        if (username == null || !username.equals(User.SUPER_ADMIN_USERNAME))
+            throw new SecurityException("bu işlem sizi aşar.");
+
         baseEntityRepository.deleteById(id);
     }
 

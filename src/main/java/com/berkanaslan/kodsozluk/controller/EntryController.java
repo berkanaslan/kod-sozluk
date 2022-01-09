@@ -2,6 +2,9 @@ package com.berkanaslan.kodsozluk.controller;
 
 import com.berkanaslan.kodsozluk.model.Entry;
 import com.berkanaslan.kodsozluk.repository.EntryRepository;
+import com.berkanaslan.kodsozluk.service.entry.EntryAddedEvent;
+import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -9,8 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = EntryController.PATH)
+@AllArgsConstructor
 public class EntryController extends BaseEntityController<Entry, Entry.Info> {
     static final String PATH = "/entry";
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public Class<Entry> getEntityClass() {
@@ -25,6 +31,13 @@ public class EntryController extends BaseEntityController<Entry, Entry.Info> {
     @Override
     public String getRequestPath() {
         return PATH;
+    }
+
+    @PostMapping
+    @Override
+    public Entry save(@RequestBody final Entry entry) {
+        applicationEventPublisher.publishEvent(new EntryAddedEvent(this, entry));
+        return super.save(entry);
     }
 
     @GetMapping(path = "topic/{topicId}", params = {"pn", "ps", "sb", "sd"})

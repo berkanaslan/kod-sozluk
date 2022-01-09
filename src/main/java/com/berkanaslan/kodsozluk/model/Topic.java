@@ -33,6 +33,8 @@ public class Topic extends Auditable implements BaseEntity {
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "topic", targetEntity = Entry.class)
     private List<Entry> entries;
 
+    private int dailyTotalEntryCount;
+
     @PrePersist
     @PreUpdate
     public void preOperations() {
