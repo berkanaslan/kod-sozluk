@@ -3,6 +3,7 @@ package com.berkanaslan.kodsozluk.controller;
 import com.berkanaslan.kodsozluk.model.Entry;
 import com.berkanaslan.kodsozluk.repository.EntryRepository;
 import com.berkanaslan.kodsozluk.service.entry.EntryAddedEvent;
+import com.berkanaslan.kodsozluk.service.entry.EntryService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ public class EntryController extends BaseEntityController<Entry, Entry.Info> {
     static final String PATH = "/entry";
 
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final EntryService entryService;
 
     @Override
     public Class<Entry> getEntityClass() {
@@ -50,5 +52,10 @@ public class EntryController extends BaseEntityController<Entry, Entry.Info> {
 
         final Pageable pageable = preparePageRequest(page, size, sortBy, sortDirection);
         return ((EntryRepository) getBaseEntityRepository()).findAllByTopicId(topicId, pageable);
+    }
+
+    @GetMapping(path = "/add-to-favorite/{entryId}")
+    public void addToFavorite(@PathVariable(name = "entryId") long entryId) {
+        entryService.addToFavorites(entryId);
     }
 }

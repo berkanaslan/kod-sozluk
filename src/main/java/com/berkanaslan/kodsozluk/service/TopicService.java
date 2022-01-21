@@ -1,6 +1,8 @@
 package com.berkanaslan.kodsozluk.service;
 
+import com.berkanaslan.kodsozluk.model.Topic;
 import com.berkanaslan.kodsozluk.repository.TopicRepository;
+import com.berkanaslan.kodsozluk.util.I18NUtil;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,4 +27,20 @@ public class TopicService {
         topicRepository.resetDailyTotalEntryCount();
         LOGGER.info("Total entry count reset process completed.");
     }
+
+
+    public Topic save(final Topic topic) {
+        if (topic.getName() == null || topic.getName().isEmpty()) {
+            throw new IllegalArgumentException(I18NUtil.getMessageByLocale("message.topic_name_can_not_be_null"));
+        }
+
+        Topic existTopic = topicRepository.findByName(topic.getName()).orElse(null);
+
+        if (existTopic != null) {
+            return existTopic;
+        }
+
+        return topicRepository.save(topic);
+    }
+
 }

@@ -1,10 +1,7 @@
 package com.berkanaslan.kodsozluk;
 
 import com.berkanaslan.kodsozluk.controller.TopicController;
-import com.berkanaslan.kodsozluk.model.Entry;
-import com.berkanaslan.kodsozluk.model.Head;
-import com.berkanaslan.kodsozluk.model.Topic;
-import com.berkanaslan.kodsozluk.model.User;
+import com.berkanaslan.kodsozluk.model.*;
 import com.berkanaslan.kodsozluk.repository.HeadRepository;
 import com.berkanaslan.kodsozluk.repository.TopicRepository;
 import com.berkanaslan.kodsozluk.repository.UserRepository;
@@ -49,6 +46,14 @@ public class Initializer implements ApplicationListener<DataSourceSchemaCreatedE
         superAdmin.setEnabled(true);
         superAdmin.setBlocked(false);
         superAdmin.setPassword(passwordEncoder.encode("password"));
+
+        final ConnectedApplications connectedApplications = new ConnectedApplications();
+        connectedApplications.setFacebook("aslberkan");
+        connectedApplications.setTwitter("asl_berkan");
+        connectedApplications.setGithub("berkanaslan");
+        connectedApplications.setInstagram("aslnberkan");
+
+        superAdmin.setConnectedApplications(connectedApplications);
         userRepository.save(superAdmin);
     }
 

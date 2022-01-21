@@ -64,6 +64,9 @@ public class User extends Auditable implements BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
+    @Embedded
+    private ConnectedApplications connectedApplications;
+
     @PrePersist
     @PreUpdate
     public void preOperations() {
