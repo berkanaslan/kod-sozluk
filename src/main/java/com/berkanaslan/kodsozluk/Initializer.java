@@ -1,8 +1,9 @@
 package com.berkanaslan.kodsozluk;
 
-import com.berkanaslan.kodsozluk.controller.TopicController;
-import com.berkanaslan.kodsozluk.model.*;
-import com.berkanaslan.kodsozluk.repository.HeadRepository;
+import com.berkanaslan.kodsozluk.model.ConnectedApplications;
+import com.berkanaslan.kodsozluk.model.Entry;
+import com.berkanaslan.kodsozluk.model.Topic;
+import com.berkanaslan.kodsozluk.model.User;
 import com.berkanaslan.kodsozluk.repository.TopicRepository;
 import com.berkanaslan.kodsozluk.repository.UserRepository;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceSchemaCreatedEvent;
@@ -18,20 +19,17 @@ public class Initializer implements ApplicationListener<DataSourceSchemaCreatedE
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TopicRepository topicRepository;
-    private final HeadRepository headRepository;
 
-    public Initializer(UserRepository userRepository, PasswordEncoder passwordEncoder, TopicRepository topicRepository, HeadRepository headRepository) {
+    public Initializer(UserRepository userRepository, PasswordEncoder passwordEncoder, TopicRepository topicRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.topicRepository = topicRepository;
-        this.headRepository = headRepository;
     }
 
     @Override
     public void onApplicationEvent(DataSourceSchemaCreatedEvent event) {
         createSuperAdminUser();
         createFirstTopicAndEntry();
-        createHeads();
     }
 
     private void createSuperAdminUser() {
@@ -45,7 +43,9 @@ public class Initializer implements ApplicationListener<DataSourceSchemaCreatedE
         superAdmin.setRole(User.Role.ADMIN);
         superAdmin.setEnabled(true);
         superAdmin.setBlocked(false);
+        superAdmin.setGender(User.Gender.UNDEFINED);
         superAdmin.setPassword(passwordEncoder.encode("password"));
+        superAdmin.setEntryCount(1L);
 
         final ConnectedApplications connectedApplications = new ConnectedApplications();
         connectedApplications.setFacebook("aslberkan");
@@ -70,23 +70,5 @@ public class Initializer implements ApplicationListener<DataSourceSchemaCreatedE
         entry.setMessage("gitar calmak icin kullanilan minik plastik garip nesne.");
         topic.setEntries(List.of(entry));
         topicRepository.save(topic);
-    }
-
-    private void createHeads() {
-        if (headRepository.findById(1L).isPresent()) {
-            return;
-        }
-
-        final String leadingPath = TopicController.PATH;
-
-        headRepository.save(new Head("bugün", leadingPath + "/today"));
-        headRepository.save(new Head("gündem", leadingPath + "/trend"));
-        headRepository.save(new Head("debe", leadingPath + "/popular"));
-        headRepository.save(new Head("sorunsallar", leadingPath + "/issues"));
-        headRepository.save(new Head("takip", leadingPath + "/following"));
-        headRepository.save(new Head("tarihte bugün", leadingPath + "/today-in-history"));
-        headRepository.save(new Head("son", leadingPath + "/latest"));
-        headRepository.save(new Head("kenar", leadingPath + "/draft"));
-        headRepository.save(new Head("çaylaklar", leadingPath + "/rookie"));
     }
 }

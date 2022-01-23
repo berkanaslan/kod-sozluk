@@ -3,10 +3,7 @@ package com.berkanaslan.kodsozluk.controller;
 
 import com.berkanaslan.kodsozluk.model.User;
 import com.berkanaslan.kodsozluk.service.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -38,6 +35,22 @@ public class UserController extends BaseEntityController<User, User.Info> {
     @PostMapping
     @Override
     public User save(@RequestBody final User user) {
-        return userService.register(user);
+        return userService.save(user);
+    }
+
+    @GetMapping(params = {"username"})
+    public User getUserByUsername(@RequestParam(name = "username") String username) {
+        return userService.getUserByUsername(username);
+    }
+
+    @GetMapping(path = "follow", params = {"username"})
+    public User followUser(@RequestParam(name = "username") String username) {
+        return userService.followUser(username);
+    }
+
+
+    @GetMapping(path = "unfollow", params = {"username"})
+    public User unfollowUser(@RequestParam(name = "username") String username) {
+        return userService.unfollowUser(username);
     }
 }
