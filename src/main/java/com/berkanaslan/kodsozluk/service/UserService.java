@@ -1,13 +1,16 @@
 package com.berkanaslan.kodsozluk.service;
 
 import com.berkanaslan.kodsozluk.controller.BaseEntityController;
+import com.berkanaslan.kodsozluk.model.Principal;
 import com.berkanaslan.kodsozluk.model.User;
 import com.berkanaslan.kodsozluk.repository.UserRepository;
 import com.berkanaslan.kodsozluk.util.I18NUtil;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -31,7 +34,7 @@ public class UserService {
         throw new RuntimeException("User not found!");
     }
 
-    public User register(final User user) {
+    public User save(final User user) {
         if (user.getId() != 0) {
             return this.update(user);
         }
@@ -67,7 +70,7 @@ public class UserService {
 
     private User update(final User user) {
         if (user.getId() == 0) {
-            return this.register(user);
+            return this.save(user);
         }
 
         final Optional<User> userOptional = userRepository.findById(user.getId());
@@ -85,5 +88,58 @@ public class UserService {
         }
 
         return userRepository.save(existingUserOnDB);
+    }
+
+    // TODO: I18N Support:
+    public User getUserByUsername(final String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("No such user."));
+    }
+
+    // TODO: I18N Support:
+    public User followUser(final String username) {
+        final User who = getUserBySecurityContextHolder();
+        final User whom = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("No such user."));
+
+        final Set<User> followings = who.getFollowing();
+        final boolean isAdded = followings.add(whom);
+
+        if (!isAdded) {
+            throw new IllegalArgumentException("zaten takiptesin.");
+        }
+
+        who.setFollowingCount(who.getFollowingCount() + 1);
+        who.setFollowing(followings);
+
+        whom.setFollowersCount(whom.getFollowersCount() + 1);
+        userRepository.save(whom);
+
+        return userRepository.save(who);
+    }
+
+    // TODO: I18N Support:
+    public User unfollowUser(final String username) {
+        User who = getUserBySecurityContextHolder();
+        User whom = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("No such user."));
+
+        final Set<User> followings = who.getFollowing();
+        final boolean isRemoved = followings.remove(whom);
+
+        if (!isRemoved) {
+            throw new IllegalArgumentException("zaten takipte değildin.");
+        }
+
+        who.setFollowingCount(who.getFollowingCount() - 1);
+        who.setFollowing(followings);
+
+        whom.setFollowersCount(whom.getFollowersCount() - 1);
+        userRepository.save(whom);
+
+        return userRepository.save(who);
+    }
+
+    // TODO: I18N Support:
+    private User getUserBySecurityContextHolder() {
+        return userRepository.findByUsername(((Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername())
+                .orElseThrow(() -> new IllegalArgumentException("No such user."));
     }
 }

@@ -3,6 +3,8 @@ package com.berkanaslan.kodsozluk.model;
 import com.berkanaslan.kodsozluk.audit.Auditable;
 import com.berkanaslan.kodsozluk.config.LowerCase;
 import com.berkanaslan.kodsozluk.model.core.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -12,7 +14,9 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -25,7 +29,7 @@ public class User extends Auditable implements BaseEntity {
     public static final String SYSTEM = "SYSTEM";
     public static final String SUPER_ADMIN_USERNAME = "superadmin";
 
-    enum Gender {FEMALE, MALE, OTHER, UNDEFINED}
+    public enum Gender {FEMALE, MALE, OTHER, UNDEFINED}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,6 +70,26 @@ public class User extends Auditable implements BaseEntity {
 
     @Embedded
     private ConnectedApplications connectedApplications;
+
+    @JsonIgnore
+    @JoinTable(name = "follower_relation",
+            joinColumns = {@JoinColumn(name = "follower_id")},
+            inverseJoinColumns = {@JoinColumn(name = "following_id")})
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<User> following = new HashSet<>();
+
+    @JsonBackReference
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "following")
+    private Set<User> followers = new HashSet<>();
+
+    @Column(nullable = false)
+    private long entryCount;
+
+    @Column(nullable = false)
+    private long followersCount;
+
+    @Column(nullable = false)
+    private long followingCount;
 
     @PrePersist
     @PreUpdate
