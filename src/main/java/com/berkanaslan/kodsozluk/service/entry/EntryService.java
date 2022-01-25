@@ -1,6 +1,7 @@
 package com.berkanaslan.kodsozluk.service.entry;
 
 import com.berkanaslan.kodsozluk.model.Entry;
+import com.berkanaslan.kodsozluk.model.EntryFavorite;
 import com.berkanaslan.kodsozluk.model.Principal;
 import com.berkanaslan.kodsozluk.model.User;
 import com.berkanaslan.kodsozluk.repository.EntryRepository;
@@ -10,7 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -38,13 +39,18 @@ public class EntryService {
             throw new IllegalArgumentException(I18NUtil.getMessageByLocale("message.no_such", User.class.getSimpleName()));
         }
 
-        final List<User> favorites = entry.getFavorites();
+        final EntryFavorite entryFavorite = new EntryFavorite(entry, user);
 
-        if (favorites.contains(user)) {
-            favorites.remove(user);
+        final Set<EntryFavorite> favorites = entry.getFavorites();
+
+        // Add to favorites
+        final boolean isAdded = favorites.add(entryFavorite);
+
+        // Or remove:
+        if (!isAdded) {
+            favorites.remove(entryFavorite);
             entry.setFavoritesCount(entry.getFavoritesCount() - 1);
         } else {
-            favorites.add(user);
             entry.setFavoritesCount(entry.getFavoritesCount() + 1);
         }
 

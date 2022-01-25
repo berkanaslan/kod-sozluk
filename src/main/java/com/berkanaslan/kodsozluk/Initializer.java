@@ -68,6 +68,7 @@ public class Initializer implements ApplicationListener<DataSourceSchemaCreatedE
         final Entry entry = new Entry();
         entry.setTopic(topic);
         entry.setMessage("gitar calmak icin kullanilan minik plastik garip nesne.");
+        entry.setAuthor(userRepository.findByUsername(User.SUPER_ADMIN_USERNAME).get());
         topic.setEntries(List.of(entry));
         topicRepository.save(topic);
     }
