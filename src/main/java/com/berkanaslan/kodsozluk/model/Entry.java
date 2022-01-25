@@ -3,6 +3,7 @@ package com.berkanaslan.kodsozluk.model;
 import com.berkanaslan.kodsozluk.audit.Auditable;
 import com.berkanaslan.kodsozluk.config.LowerCase;
 import com.berkanaslan.kodsozluk.model.core.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -31,11 +33,16 @@ public class Entry extends Auditable implements BaseEntity {
     @ManyToOne
     private Topic topic;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "entry_favorites", joinColumns = @JoinColumn(name = "entry_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private List<User> favorites;
+    @ManyToOne
+    private User author;
 
-    private int favoritesCount;
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinTable(name = "entry_favorite_relation")
+    private Set<EntryFavorite> favorites = new HashSet<>();
+
+    @Column(nullable = false)
+    private long favoritesCount;
 
     @PrePersist
     @PreUpdate
@@ -45,14 +52,16 @@ public class Entry extends Auditable implements BaseEntity {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public interface Info extends BaseEntity.Info {
+        Topic getTopic();
+
         String getMessage();
 
-        String getCreatedBy();
+        User getAuthor();
 
         Date getCreationDate();
 
         Date getLastModifiedDate();
 
-        int getFavoritesCount();
+        long getFavoritesCount();
     }
 }

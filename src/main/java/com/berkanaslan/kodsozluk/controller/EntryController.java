@@ -54,6 +54,30 @@ public class EntryController extends BaseEntityController<Entry, Entry.Info> {
         return ((EntryRepository) getBaseEntityRepository()).findAllByTopicId(topicId, pageable);
     }
 
+    @GetMapping(path = "/user/{userId}", params = {"pn", "ps", "sb", "sd"})
+    public Page<Entry.Info> getPagedEntriesOfUser(
+            @PathVariable(name = "userId") long userId,
+            @RequestParam(name = "pn", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "ps", defaultValue = "20", required = false) int size,
+            @RequestParam(name = "sb", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(name = "sd", defaultValue = SORT_DIRECTION_DESC, required = false) String sortDirection) {
+
+        final Pageable pageable = preparePageRequest(page, size, sortBy, sortDirection);
+        return ((EntryRepository) getBaseEntityRepository()).findAllByAuthor_Id(userId, pageable);
+    }
+
+    @GetMapping(path = "/user/{userId}/favorites", params = {"pn", "ps", "sb", "sd"})
+    public Page<Entry.Info> getPagedFavoritedEntriesOfUser(
+            @PathVariable(name = "userId") long userId,
+            @RequestParam(name = "pn", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "ps", defaultValue = "20", required = false) int size,
+            @RequestParam(name = "sb", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(name = "sd", defaultValue = SORT_DIRECTION_DESC, required = false) String sortDirection) {
+
+        final Pageable pageable = preparePageRequest(page, size, sortBy, sortDirection);
+        return ((EntryRepository) getBaseEntityRepository()).findAllByFavorites_User_IdOrderByFavorites_AddedAtDesc(userId, pageable);
+    }
+
     @GetMapping(path = "/add-to-favorite/{entryId}")
     public void addToFavorite(@PathVariable(name = "entryId") long entryId) {
         entryService.addToFavorites(entryId);
