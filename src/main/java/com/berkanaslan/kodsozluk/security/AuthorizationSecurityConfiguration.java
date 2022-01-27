@@ -34,15 +34,13 @@ public class AuthorizationSecurityConfiguration extends WebSecurityConfigurerAda
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET,
-                        "/actuator/**",
+                        "/actuator/health",
                         "/api-docs/**",
                         "/api-docs.html/**",
                         "/swagger-ui.html",
                         "/swagger-ui/**",
-                        "/head/**",
                         "/topic/**",
-                        "/entry",
-                        "/entry/topic/{id}"
+                        "/entry/**"
                 ).permitAll()
                 .antMatchers("/user/**").permitAll()
                 .anyRequest().authenticated()
