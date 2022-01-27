@@ -1,6 +1,5 @@
 package com.berkanaslan.kodsozluk.service.entry;
 
-import com.berkanaslan.kodsozluk.controller.TopicController;
 import com.berkanaslan.kodsozluk.model.Topic;
 import com.berkanaslan.kodsozluk.repository.TopicRepository;
 import lombok.AllArgsConstructor;
