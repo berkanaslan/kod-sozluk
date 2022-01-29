@@ -8,12 +8,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+
+import static javax.persistence.TemporalType.TIMESTAMP;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -36,6 +39,13 @@ public class Entry extends Auditable implements BaseEntity {
     @ManyToOne
     private User author;
 
+    @Temporal(TIMESTAMP)
+    @Column(updatable = false)
+    private Date createdAt;
+
+    @Temporal(TIMESTAMP)
+    protected Date modifiedAt;
+
     @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinTable(name = "entry_favorite_relation")
@@ -43,6 +53,9 @@ public class Entry extends Auditable implements BaseEntity {
 
     @Column(nullable = false)
     private long favoritesCount;
+
+    @Transient
+    private boolean favorited;
 
     @PrePersist
     @PreUpdate
@@ -58,10 +71,15 @@ public class Entry extends Auditable implements BaseEntity {
 
         User getAuthor();
 
-        Date getCreationDate();
+        Date getCreatedAt();
 
-        Date getLastModifiedDate();
+        Date getModifiedAt();
 
         long getFavoritesCount();
+
+        @Value("#{target.favorited}")
+        boolean isFavorited();
+
+        void setFavorited(boolean favorited);
     }
 }

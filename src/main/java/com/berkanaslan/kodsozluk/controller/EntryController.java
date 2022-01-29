@@ -1,7 +1,6 @@
 package com.berkanaslan.kodsozluk.controller;
 
 import com.berkanaslan.kodsozluk.model.Entry;
-import com.berkanaslan.kodsozluk.repository.EntryRepository;
 import com.berkanaslan.kodsozluk.service.entry.EntryAddedEvent;
 import com.berkanaslan.kodsozluk.service.entry.EntryService;
 import lombok.AllArgsConstructor;
@@ -9,6 +8,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 
 @RestController
@@ -38,7 +39,13 @@ public class EntryController extends BaseEntityController<Entry, Entry.Info> {
     @PostMapping
     @Override
     public Entry save(@RequestBody final Entry entry) {
-        applicationEventPublisher.publishEvent(new EntryAddedEvent(this, entry));
+        if (entry.getId() == 0) {
+            applicationEventPublisher.publishEvent(new EntryAddedEvent(this, entry));
+            entry.setCreatedAt(new Date());
+        } else {
+            entry.setModifiedAt(new Date());
+        }
+
         return super.save(entry);
     }
 
@@ -51,7 +58,7 @@ public class EntryController extends BaseEntityController<Entry, Entry.Info> {
             @RequestParam(name = "sd", defaultValue = SORT_DIRECTION_ASC, required = false) String sortDirection) {
 
         final Pageable pageable = preparePageRequest(page, size, sortBy, sortDirection);
-        return ((EntryRepository) getBaseEntityRepository()).findAllByTopicId(topicId, pageable);
+        return entryService.getPagedEntriesByTopicId(topicId, pageable);
     }
 
     @GetMapping(path = "/user/{userId}", params = {"pn", "ps", "sb", "sd"})
@@ -63,7 +70,7 @@ public class EntryController extends BaseEntityController<Entry, Entry.Info> {
             @RequestParam(name = "sd", defaultValue = SORT_DIRECTION_DESC, required = false) String sortDirection) {
 
         final Pageable pageable = preparePageRequest(page, size, sortBy, sortDirection);
-        return ((EntryRepository) getBaseEntityRepository()).findAllByAuthor_Id(userId, pageable);
+        return entryService.getPagedEntriesOfUser(userId, pageable);
     }
 
     @GetMapping(path = "/user/{userId}/favorites", params = {"pn", "ps", "sb", "sd"})
@@ -75,11 +82,11 @@ public class EntryController extends BaseEntityController<Entry, Entry.Info> {
             @RequestParam(name = "sd", defaultValue = SORT_DIRECTION_DESC, required = false) String sortDirection) {
 
         final Pageable pageable = preparePageRequest(page, size, sortBy, sortDirection);
-        return ((EntryRepository) getBaseEntityRepository()).findAllByFavorites_User_IdOrderByFavorites_AddedAtDesc(userId, pageable);
+        return entryService.getPagedFavoritedEntriesOfUser(userId, pageable);
     }
 
-    @GetMapping(path = "/add-to-favorite/{entryId}")
-    public void addToFavorite(@PathVariable(name = "entryId") long entryId) {
-        entryService.addToFavorites(entryId);
+    @GetMapping(path = "/{entryId}/add-to-favorite")
+    public boolean addToFavorite(@PathVariable(name = "entryId") long entryId) {
+        return entryService.addToFavorites(entryId);
     }
 }
