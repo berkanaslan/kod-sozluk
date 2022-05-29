@@ -4,27 +4,22 @@ import com.berkanaslan.kodsozluk.model.ConnectedApplications;
 import com.berkanaslan.kodsozluk.model.Entry;
 import com.berkanaslan.kodsozluk.model.Topic;
 import com.berkanaslan.kodsozluk.model.User;
+import com.berkanaslan.kodsozluk.repository.EntryRepository;
 import com.berkanaslan.kodsozluk.repository.TopicRepository;
 import com.berkanaslan.kodsozluk.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceSchemaCreatedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
+@AllArgsConstructor
 public class Initializer implements ApplicationListener<DataSourceSchemaCreatedEvent> {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TopicRepository topicRepository;
-
-    public Initializer(UserRepository userRepository, PasswordEncoder passwordEncoder, TopicRepository topicRepository) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.topicRepository = topicRepository;
-    }
+    private final EntryRepository entryRepository;
 
     @Override
     public void onApplicationEvent(DataSourceSchemaCreatedEvent event) {
@@ -64,12 +59,12 @@ public class Initializer implements ApplicationListener<DataSourceSchemaCreatedE
 
         final Topic topic = new Topic();
         topic.setName("pena");
+        topicRepository.save(topic);
 
         final Entry entry = new Entry();
         entry.setTopic(topic);
         entry.setMessage("gitar calmak icin kullanilan minik plastik garip nesne.");
         entry.setAuthor(userRepository.findByUsername(User.SUPER_ADMIN_USERNAME).get());
-        topic.setEntries(List.of(entry));
-        topicRepository.save(topic);
+        entryRepository.save(entry);
     }
 }

@@ -30,7 +30,8 @@ public class Entry extends Auditable implements BaseEntity {
     private long id;
 
     @LowerCase
-    @Column(nullable = false, length = 2048)
+    @Column(nullable = false)
+    @Lob
     private String message;
 
     @ManyToOne

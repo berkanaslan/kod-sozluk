@@ -5,6 +5,7 @@ import com.berkanaslan.kodsozluk.config.LowerCase;
 import com.berkanaslan.kodsozluk.model.core.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,10 +31,14 @@ public class Topic extends Auditable implements BaseEntity {
     private String name;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "topic", targetEntity = Entry.class)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "topic", targetEntity = Entry.class)
     private List<Entry> entries;
 
     private int dailyTotalEntryCount;
+
+    public Topic(String name) {
+        this.name = name;
+    }
 
     @PrePersist
     @PreUpdate

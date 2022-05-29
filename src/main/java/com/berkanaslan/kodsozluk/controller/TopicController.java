@@ -48,4 +48,15 @@ public class TopicController extends BaseEntityController<Topic, Topic.Info> {
         final Pageable pageable = preparePageRequest(page, size, sortBy, sortDirection);
         return ((TopicRepository) getBaseEntityRepository()).findAllPagedByCreationDateOrderByDailyTotalEntryCountDesc(new Date(), pageable);
     }
+
+    @GetMapping(params = {"name"})
+    public Topic getByName(@RequestParam(name = "name") String name) {
+        Topic topic = ((TopicRepository) getBaseEntityRepository()).findByName(name).orElse(null);
+
+        if (topic == null) {
+            return new Topic(name);
+        }
+
+        return topic;
+    }
 }

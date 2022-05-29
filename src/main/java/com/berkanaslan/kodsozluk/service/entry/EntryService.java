@@ -1,20 +1,20 @@
 package com.berkanaslan.kodsozluk.service.entry;
 
-import com.berkanaslan.kodsozluk.model.Entry;
-import com.berkanaslan.kodsozluk.model.EntryFavorite;
-import com.berkanaslan.kodsozluk.model.Principal;
-import com.berkanaslan.kodsozluk.model.User;
+import com.berkanaslan.kodsozluk.model.*;
 import com.berkanaslan.kodsozluk.model.core.BaseEntity;
 import com.berkanaslan.kodsozluk.repository.EntryRepository;
+import com.berkanaslan.kodsozluk.repository.TopicRepository;
 import com.berkanaslan.kodsozluk.repository.UserRepository;
 import com.berkanaslan.kodsozluk.service.PrincipalService;
 import com.berkanaslan.kodsozluk.util.I18NUtil;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,9 +23,26 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class EntryService {
     private final EntryRepository entryRepository;
+    private final TopicRepository topicRepository;
     private final UserRepository userRepository;
     private final PrincipalService principalService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
+    public Entry save(Entry entry) {
+        if (entry.getTopic().getId() == 0) {
+            final Topic savedTopic = topicRepository.save(entry.getTopic());
+            entry.setTopic(savedTopic);
+        }
+
+        if (entry.getId() == 0) {
+            entry.setCreatedAt(new Date());
+            applicationEventPublisher.publishEvent(new EntryAddedEvent(this, entry));
+        } else {
+            entry.setModifiedAt(new Date());
+        }
+
+        return entryRepository.save(entry);
+    }
 
     public Page<Entry.Info> getPagedEntriesByTopicId(final long topicId, final Pageable pg) {
         final Page<Entry.Info> pagedEntries = entryRepository.findAllByTopicId(topicId, pg);
