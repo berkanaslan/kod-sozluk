@@ -44,6 +44,7 @@ spring.jpa.hibernate.ddl-auto=none
 # kod-sozluk
 
 kod-sozluk is a server-side clone of eksisozluk.com.
+For more details please see: https://github.com/berkanaslan/kod-sozluk-mobile
 
 #### What can it do for you?
 

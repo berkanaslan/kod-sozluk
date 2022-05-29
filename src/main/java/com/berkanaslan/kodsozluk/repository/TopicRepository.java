@@ -15,7 +15,6 @@ import java.util.Optional;
 public interface TopicRepository extends BaseEntityRepository<Topic> {
     Optional<Topic> findByName(String name);
 
-    // TODO : If possible, move to HQL/JPA from native query.
     @Query(value = "select * from topic t" +
             " where cast(creation_date as date) = cast(:date as date)" +
             " order by daily_total_entry_count desc", nativeQuery = true)

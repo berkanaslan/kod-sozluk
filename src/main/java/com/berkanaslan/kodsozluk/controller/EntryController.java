@@ -18,7 +18,6 @@ import java.util.Date;
 public class EntryController extends BaseEntityController<Entry, Entry.Info> {
     static final String PATH = "/entry";
 
-    private final ApplicationEventPublisher applicationEventPublisher;
     private final EntryService entryService;
 
     @Override
@@ -39,14 +38,7 @@ public class EntryController extends BaseEntityController<Entry, Entry.Info> {
     @PostMapping
     @Override
     public Entry save(@RequestBody final Entry entry) {
-        if (entry.getId() == 0) {
-            applicationEventPublisher.publishEvent(new EntryAddedEvent(this, entry));
-            entry.setCreatedAt(new Date());
-        } else {
-            entry.setModifiedAt(new Date());
-        }
-
-        return super.save(entry);
+        return entryService.save(entry);
     }
 
     @GetMapping(path = "topic/{topicId}", params = {"pn", "ps", "sb", "sd"})

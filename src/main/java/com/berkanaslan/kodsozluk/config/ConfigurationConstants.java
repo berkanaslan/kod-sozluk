@@ -9,12 +9,9 @@ public interface ConfigurationConstants {
     String TOKEN_PREFIX = "Bearer ";
     String SECRET = "SECRET_!23";
 
-    long TOKEN_EXPIRATION_TIME = 28_800_000;
-    long TOKEN_REFRESH_TIME = 28_800_000;
-
+    long TOKEN_EXPIRATION_TIME = 262_980_000_000L;
+    long TOKEN_REFRESH_TIME = 262_980_000_000L;
 
     // URL
-    String PERMIT_ALL = "/**";
     String LOGIN = "/login";
-
 }

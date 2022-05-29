@@ -19,6 +19,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
         ResponseWrapper responseWrapper = new ResponseWrapper(I18NUtil.getMessageByLocale("message.error"), ex.getMessage());
         LOGGER.warn("Exception occur: ", ex);
+
         return handleExceptionInternal(ex, responseWrapper, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 }
